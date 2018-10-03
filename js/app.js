@@ -28,7 +28,7 @@ class Col extends React.Component {
   }
 }
 
-class Card extends React.Component {
+class CardIcon extends React.Component {
   constructor(props) {
     super(props);
     this.name = props.name;
@@ -44,8 +44,7 @@ class Card extends React.Component {
     const comment = {text: commentText, authorId : Global_Author_Name};
     this.card.push(comment);
     localStorage.getItem("card_" + this.name);
-    
-    
+  
     //?????
     this.setState((prevState) => {
       prevState.comments.push(comment);
@@ -54,9 +53,95 @@ class Card extends React.Component {
   }
   removeComment(elem){
     localStorage.removeItem("comment_" + elem.id); 
+    
     this.setState((prevState) => {
-      prevState.splice(elem.order, 1);
+      prevState.comments.splice(elem.order, 1);
+      return {comments: prevState.comments};
+    });   
+  }
+  render() {
+    return (
+      <div>
+        {this.state.comments.map( function(comment, index) {
+          return <Comment id = {comment.id} order={index} removeComment={this.removeComment.bind(this)}/>;
+        })}
+        <form action={this.addComment.bind(this)}>
+          <p><b>Введите ваш комментарий:</b></p>
+          <p><textarea rows="10" cols="45" name="text"></textarea></p>
+          <p><input type="submit" value="Оставить"/></p>
+        </form>
+      </div>
+    );
+  }
+
+
+  /*
+  //На случай модели:
+  editComment(elem) {
+    //let commentText = elem.text;s
+    const comment = {id: elem.id, text: elem.text, authorName : elem.authorName};
+    localStorage.setItem("comment_" + comment.id, JSON.stringify(comment));
+    
+    this.setState((prevState) => {
+      prevState.comments[elem.order] = comment;
       return {comments: prevState};
+    });
+  }
+  
+  {this.state.comments.map( function(comment,index) {
+      return <Comment id = {comment.id} order={index} editComment={this.editComment.bind(this)}/>;
+  })}
+        
+  
+  */
+ 
+}
+
+//ready to check and check phase render
+//  this.card - is it nesseary?(optimization)
+class Card extends React.Component {
+  constructor(props) {
+    super(props);
+    this.card = JSON.stringify(localStorage.getItem("card_" + props.id));
+    let comments = this.card.comments;
+    this.deleteCommentFromAuthor = props.deleteCommentFromAuthor;
+    if(!!comments) comments = [];/// is == null || length==0
+    this.state = {comments: comments};
+  }
+  addComment(elem) {
+    let commentText = elem.value;
+    const nextId = localStorage.getItem("last_id") + 1;
+    const comment = {
+      id: nextId,
+      text: commentText, 
+      cardId : this.card.id,
+      authorId : Global_Author.id
+    };
+    localStorage.setItem("comment_" + nextId, JSON.stringify(comment));
+    
+    let author = JSON.parse(localStorage.getItem("author_" + Global_Author.id));
+    author.comments.push({id: nextId});
+    localStorage.setItem("author_" + Global_Author.id, JSON.stringify(author));
+    
+    //let card = JSON.parse(localStorage.getItem("card_" + this.id));
+    localStorage.setItem("last_id", next_id);
+
+    //Check
+    this.card.comments.push({id: nextId}); // auto update this.state.comments
+    localStorage.setItem("card_" + this.card.id, JSON.stringify(this.card));
+    this.setState((prevState) => {
+      return {comments: prevState.comments};
+    });
+    //Stores.commentStore.add(comment) with generated id???
+  }
+  removeComment(elem){
+    localStorage.removeItem("comment_" + elem.id); 
+    this.deleteCommentFromAuthor(elem);
+    //Check
+    this.card.comments.splice(elem.order, 1);  // auto update this.state.comments
+    localStorage.setItem("card_" + this.card.id, JSON.stringify(this.card));
+    this.setState((prevState) => {
+      return {comments: prevState.comments};
     });   
   }
   render() {
@@ -103,8 +188,8 @@ class Comment extends React.Component {
     super(props);
     this.id = props.id;
     this.removeComment = props.removeComment;
-    const comment = JSON.stringify(localStorage.getItem("comment_" + this.id));
-    this.author = JSON.stringify(localStorage.getItem("author_" + comment.authorId));
+    const comment = JSON.parse(localStorage.getItem("comment_" + this.id));
+    this.author = JSON.parse(localStorage.getItem("author_" + comment.authorId));
     this.state = { comment: comment, authorName: this.author.name};
   }
   
