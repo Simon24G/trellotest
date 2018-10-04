@@ -1,291 +1,27 @@
 import React from '/lib/node_modules/react';
 import ReactDOM from '/lib/node_modules/react-dom';
-
-
-class Col extends React.Component {
-  constructor(props) {
-    super(props);
-    this.name = props.name;
-    this.cards = JSON.stringify(localStorage.getItem("col_" + this.name)).cards;
-    if(this.cards.length === 0) {
-      this.cards = [
-        {name: "1"},
-        {name: "2"},
-        {name: "3"},
-        {name: "4"}
-      ];
-    }
-    this.state = { countCols: this.cards.length,  cards: this.cards};
-  }
-  render() {
-    return (
-      <div>
-        {this.state.cards.map( function(card) {
-          return <Card name = {card.name} />;
-        })}
-      </div>
-    );
-  }
-}
-
-class CardIcon extends React.Component {
-  constructor(props) {
-    super(props);
-    this.name = props.name;
-    this.card = JSON.stringify(localStorage.getItem("card_" + this.name));
-    this.comments = this.card.comments;
-    if(this.comments.length === 0) {
-      this.comments = [];
-    }
-    this.state = { countCols: this.comments.length,  comments: this.comments};
-  }
-  addComment(elem) {
-    let commentText = elem.value;
-    const comment = {text: commentText, authorId : Global_Author_Name};
-    this.card.push(comment);
-    localStorage.getItem("card_" + this.name);
-  
-    //?????
-    this.setState((prevState) => {
-      prevState.comments.push(comment);
-      return {comments: prevState.comments};
-    });
-  }
-  removeComment(elem){
-    localStorage.removeItem("comment_" + elem.id); 
-    
-    this.setState((prevState) => {
-      prevState.comments.splice(elem.order, 1);
-      return {comments: prevState.comments};
-    });   
-  }
-  render() {
-    return (
-      <div>
-        {this.state.comments.map( function(comment, index) {
-          return <Comment id = {comment.id} order={index} removeComment={this.removeComment.bind(this)}/>;
-        })}
-        <form action={this.addComment.bind(this)}>
-          <p><b>Введите ваш комментарий:</b></p>
-          <p><textarea rows="10" cols="45" name="text"></textarea></p>
-          <p><input type="submit" value="Оставить"/></p>
-        </form>
-      </div>
-    );
-  }
-
-
-  /*
-  //На случай модели:
-  editComment(elem) {
-    //let commentText = elem.text;s
-    const comment = {id: elem.id, text: elem.text, authorName : elem.authorName};
-    localStorage.setItem("comment_" + comment.id, JSON.stringify(comment));
-    
-    this.setState((prevState) => {
-      prevState.comments[elem.order] = comment;
-      return {comments: prevState};
-    });
-  }
-  
-  {this.state.comments.map( function(comment,index) {
-      return <Comment id = {comment.id} order={index} editComment={this.editComment.bind(this)}/>;
-  })}
-        
-  
-  */
- 
-}
-
-//ready to check and check phase render
-//  this.card - is it nesseary?(optimization)
-class Card extends React.Component {
-  constructor(props) {
-    super(props);
-    this.card = JSON.stringify(localStorage.getItem("card_" + props.id));
-    let comments = this.card.comments;
-    this.deleteCommentFromAuthor = props.deleteCommentFromAuthor;
-    if(!!comments) comments = [];/// is == null || length==0
-    this.state = {comments: comments};
-  }
-  addComment(elem) {
-    let commentText = elem.value;
-    const nextId = localStorage.getItem("last_id") + 1;
-    const comment = {
-      id: nextId,
-      text: commentText, 
-      cardId : this.card.id,
-      authorId : Global_Author.id
-    };
-    localStorage.setItem("comment_" + nextId, JSON.stringify(comment));
-    
-    let author = JSON.parse(localStorage.getItem("author_" + Global_Author.id));
-    author.comments.push({id: nextId});
-    localStorage.setItem("author_" + Global_Author.id, JSON.stringify(author));
-    
-    //let card = JSON.parse(localStorage.getItem("card_" + this.id));
-    localStorage.setItem("last_id", next_id);
-
-    //Check
-    this.card.comments.push({id: nextId}); // auto update this.state.comments
-    localStorage.setItem("card_" + this.card.id, JSON.stringify(this.card));
-    this.setState((prevState) => {
-      return {comments: prevState.comments};
-    });
-    //Stores.commentStore.add(comment) with generated id???
-  }
-  removeComment(elem){
-    localStorage.removeItem("comment_" + elem.id); 
-    this.deleteCommentFromAuthor(elem);
-    //Check
-    this.card.comments.splice(elem.order, 1);  // auto update this.state.comments
-    localStorage.setItem("card_" + this.card.id, JSON.stringify(this.card));
-    this.setState((prevState) => {
-      return {comments: prevState.comments};
-    });   
-  }
-  render() {
-    return (
-      <div>
-        {this.state.comments.map( function(comment, index) {
-          return <Comment id = {comment.id} order={index} removeComment={this.removeComment.bind(this)}/>;
-        })}
-        <form action={this.addComment.bind(this)}>
-          <p><b>Введите ваш комментарий:</b></p>
-          <p><textarea rows="10" cols="45" name="text"></textarea></p>
-          <p><input type="submit" value="Оставить"/></p>
-        </form>
-      </div>
-    );
-  }
-
-
-  /*
-  //На случай модели:
-  editComment(elem) {
-    //let commentText = elem.text;
-    const comment = {id: elem.id, text: elem.text, authorName : elem.authorName};
-    localStorage.setItem("comment_" + comment.id, JSON.stringify(comment));
-    
-    this.setState((prevState) => {
-      prevState.comments[elem.order] = comment;
-      return {comments: prevState};
-    });
-  }
-  
-  {this.state.comments.map( function(comment,index) {
-      return <Comment id = {comment.id} order={index} editComment={this.editComment.bind(this)}/>;
-  })}
-        
-  
-  */
- 
-}
-
-//ready to check and check phase render
-class Comment extends React.Component {
-  constructor(props) {
-    super(props);
-    this.id = props.id;
-    this.removeComment = props.removeComment;
-    const comment = JSON.parse(localStorage.getItem("comment_" + this.id));
-    this.author = JSON.parse(localStorage.getItem("author_" + comment.authorId));
-    this.state = { comment: comment, authorName: this.author.name};
-  }
-  
-  updateComment(elem) {
-    //elem.value;
-    localStorage.setItem("comment_" + this.id, JSON.stringify(this.state.comment));
-    this.setState((prevState) => {
-      return {comment: prevState.comment};
-    });//nesseary???
-  }
-  delete() {
-    this.removeComment(this.state.comment);
-  }
-  render() {
-    return (
-      <div>
-        <p>Author: {this.state.authorName}</p>
-        <input type="text" onChange={this.updateComment.bind(this)} contenteditable="true">
-          <textarea rows="10" cols="45" name="text">{this.state.comment.text}</textarea>
-        </input>
-        <input type="button" onClick={this.delete.bind(this)} value="X"/>
-      </div>
-    );
-  }
-  /*
-  Model:
-  <p>Author: {this.state.comment.author}</p>  
-  <p>
-  <input value="Edit" onClick={} type="button"/>
-  </p>
-
-  */
-}
-
-
-class PopupAnswer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.saveName = props.saveName;
-  }
-  readName(elem){
-    this.saveName(elem.name.value);
-  }
-  render() {
-    return (
-      <div>
-        <form action={this.readName}>
-          <div>Как вас звать?</div>
-          <input name="name" type="text"/>
-          <input type="submit">Вот он я!</input>
-        </form> 
-      </div>
-    );
-  }
-}
-
-class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.name = props.name;
-    this.cols = JSON.stringify(localStorage.getItem("board_" + this.name)).cols;
-    if(this.cols.length === 0) {
-      this.cols = [
-        {name: "TODO"},
-        {name: "In Progress"},
-        {name: "Testing"},
-        {name: "Done"}
-      ];
-    }
-    this.state = { countCols: this.cols.length,  cols: this.cols};
-  }
-  render() {
-    return (
-      <div>
-        {this.state.cols.map( function(col) {
-          return <Col name = {col.name} />;
-        })}
-      </div>
-    );
-  }
-}
-
-
+import Board from '/components/Board';
+import PopupAnswer from '/components/PopupAnswer';
 
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    let author = JSON.stringify(localStorage.getItem("author"));
+    this.saveName = (name) => this.saveName(name);
+    let author = JSON.parse(localStorage.getItem("author"));
     if(author !== null) {
       this.saveAuthor(author);
     } else {
-      this.setState(() => {
-        return { 
-          answerName: true  
-        };
+      this.setState({ 
+        answerName: true  
+      });
+    }
+    this.board = JSON.parse(localStorage.getItem("board"));
+    if(this.board === null) {
+      this.board = {id: 1, name: begin};
+      localStorage.setItem("board",JSON.stringify(this.board))
+      this.setState({ 
+        boardId: this.board  
       });
     }
   }
@@ -293,26 +29,26 @@ class App extends React.Component {
     this.author = author;
     this.setState({ 
       answerName: false,
-      boardName: author.boardName,   
+      boardId: this.board.id,   
       authorName: author.name
     });
   }
   saveName(authorName) {
-    let author = {name: authorName, boardName: 1};
-    localStorage.setItem("author_" + authorName, JSON.stringify(author));
+    let author = {name: authorName};
+    localStorage.setItem("author", JSON.stringify(author));
     this.saveAuthor(author);
-  };
+  }
   render() {
     return (
       <div>
         { () => {
             if(this.state.answerName) {
-              return <PopupAnswer saveName={this.saveName.bind(this)}/>; 
+              return <PopupAnswer saveName={this.saveName}/>; 
             } else {
               return (
                 <div>
                   <div> Hello, {this.state.authorName} </div>
-                  <Board name = {this.state.boardName}/>
+                  <Board id = {this.state.boardId}/>
                 </div>
                 );
             }
@@ -322,13 +58,6 @@ class App extends React.Component {
     );
   }
 }
-/*
-  <buttom onClick={}></buttom>
-*/
 
-/*<PlayButton 
-          onClick={this.handleClick.bind(this)} 
-          isMusicPlaying={this.state.isMusicPlaying} 
-        />
-        <audio id="audio" />*/
-     
+const placeWeWantToPutComponent = document.getElementById('root');
+ReactDOM.render(<App />, placeWeWantToPutComponent);
