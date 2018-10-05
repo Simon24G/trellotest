@@ -1,33 +1,48 @@
-import React from '/../../lib/node_modules/react';
+import React, { Component } from '/../../lib/node_modules/react';
 import Comment from 'Comment';
 
 //ready to check and check phase render
 //Realise array in HashMap with key id
 //  this.card - is it nesseary?(optimization)
-export default class Card extends React.Component {
+class Card extends Component {
     constructor(props) {
         super(props);
-        this.changeCountComment = props.changeCountComment;
         this.close = props.close;
         this.delete = props.delete;
         this.update = props.update;
 
-        this.changeNameCard = (elem) => this.changeNameCard(elem);
-        this.changeDescriptionCard = (elem) => this.changeDescriptionCard(elem);
-        this.deleteComment = (elem) => { this.removeComment(elem) };
-        this.add = (elem) => { this.addComment(elem) };
         this.author = JSON.parse(localStorage.getItem("author"));
+        this.state = this.getNewPeaceState(props);
+        // or to add argument key === 1 || 2 : 1 - set, 2 - =  
     }
+
     componentWillReceiveProps(nextProps){
-        this.setState({colName: nextProps.colName});
-        if(this.id && (nextProps.id === this.id)) return;    
-        this.card = JSON.stringify(localStorage.getItem("card_" + nextProps.id));
-        let comments = this.card.comments;
-        if(!!comments) comments = [];/// is == null || length==0
-        this.setState({name: this.card.name, description: this.card.description, comments: comments}); 
+        let newState = getNewPeaceState(nextProps);
+        if(newState === 0)
+            this.setState({name: this.card.name, description: this.card.description, comments: comments}); 
     }
-    addComment(elem){
-        this.changeCountComment(1);
+    getNewPeaceState(nextProps) {
+        let state;
+        let countState = 0;
+        if(this.id && (nextProps.id === this.id)) {
+            state = {};
+        } else {
+            this.card = JSON.stringify(localStorage.getItem("card_" + nextProps.id));
+            let comments = this.card.comments;
+            if(!!comments) comments = [];/// is == null || length==0
+            this.id = nextProps.id;
+            state = {name: this.card.name, description: this.card.description, comments: comments};
+            countState = 3;
+        }
+        if(!(this.state.colName && (nextProps.colName === this.state.colName))) {
+            state.colName = nextProps.colName;
+            countState++;
+        }
+
+        return countState == 0 ? 0 : state;// i don't found is_empty_object
+    }
+  
+    addComment = (elem) => {
         let commentText = elem.value;
         const nextId = localStorage.getItem("last_id") + 1;
         const comment = {
@@ -50,12 +65,12 @@ export default class Card extends React.Component {
         this.setState((prevState) => {
             return {comments: prevState.comments};
         });
+        this.update();
         //Stores.commentStore.add(comment) with generated id???
     }
-    removeComment(elem){
+    removeComment = (elem) => {
         localStorage.removeItem("comment_" + elem.id); 
-        this.changeCountComment(-1);
-    
+        
         let author = JSON.parse(localStorage.getItem("author_" + elem.authorId));
         
         for(let index = 0; index < author.comments.length; index++){
@@ -75,20 +90,21 @@ export default class Card extends React.Component {
         this.setState((prevState) => {
            return {comments: prevState.comments};
         });   
+        this.update();
     }
     /*
     changeNameCard = (elem) => {
         ...
     }
     */
-    changeNameCard(elem){
+    changeNameCard = (elem) => {
         let card = JSON.parse(localStorage.getItem("card_" + this.id));
         card.name = elem.value;
         localStorage.setItem("card_" + this.id, JSON.stringify(card));
         this.setState({name: card.name});
         this.update();
     }
-    changeDescriptionCard(elem){
+    changeDescriptionCard = (elem) => {
         let card = JSON.parse(localStorage.getItem("card_" + this.id));
         card.description = elem.value;
         localStorage.setItem("card_" + this.id, JSON.stringify(card));
@@ -97,32 +113,36 @@ export default class Card extends React.Component {
     }
       
     render(){
+        const { name, colName, description, comments } = this.state;
+    
         return (
-        <div className="popupCard">
-            <p>
-                <form action={this.changeNameCard}>
-                        <h>{this.state.name}</h>
+            <div className="popupCard">
+                <p>
+                    <form action={this.changeNameCard}>
+                            <h>{name}</h>
+                    </form>
+                    <h>Name col: {colName}</h>
+                    <h>Author: {this.author.name}</h>
+                    <input type="button" onClick={this.close} value="Close"/>
+                </p>
+                
+                <form action={this.changeDescriptionCard}>
+                <textarea rows="10" cols="45" name="text">{description}</textarea>
                 </form>
-                <h>Name col: {this.state.colName}</h>
-                <h>Author: {this.author.id}</h>
-                <input type="button" onClick={this.close} value="Close"/>
-            </p>
-            
-            <form action={this.changeDescriptionCard}>
-              <textarea rows="10" cols="45" name="text">{this.state.description}</textarea>
-            </form>
-            <input type="button" onClick={this.delete} value="Delete"/>
+                <input type="button" onClick={this.delete} value="Delete"/>
 
-            {this.state.comments.map( function(comment) {
-               return <Comment id = {comment.id} removeComment={this.deleteComment}/>;
-            })}
+                {comments.map( (comment) => {
+                return <Comment id = {comment.id} removeComment={this.removeComment}/>;
+                })}
 
-            <form action={this.add}>
-                <p><b>Введите ваш комментарий:</b></p>
-                <p><textarea rows="10" cols="45" name="text"></textarea></p>
-                <p><input type="submit" value="Оставить"/></p>
-            </form>
-        </div>
+                <form action={this.addComment}>
+                    <p><b>Введите ваш комментарий:</b></p>
+                    <p><textarea rows="10" cols="45" name="text"></textarea></p>
+                    <p><input type="submit" value="Оставить"/></p>
+                </form>
+            </div>
         );
     }
 }
+
+export default Card;

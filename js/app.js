@@ -1,4 +1,4 @@
-import React from '/lib/node_modules/react';
+import React from 'react';
 import ReactDOM from '/lib/node_modules/react-dom';
 import Board from '/components/Board';
 import PopupAnswer from '/components/PopupAnswer';
@@ -8,23 +8,20 @@ import PopupAnswer from '/components/PopupAnswer';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.saveName = (name) => this.saveName(name);
     let author = JSON.parse(localStorage.getItem("author"));
+    let state;
     if(author !== null) {
       this.saveAuthor(author);
     } else {
-      this.setState({ 
-        answerName: true  
-      });
+      state.answerName = true;
     }
     this.board = JSON.parse(localStorage.getItem("board"));
     if(this.board === null) {
       this.board = {id: 1, name: begin};
       localStorage.setItem("board",JSON.stringify(this.board));
-      this.setState({ 
-        boardId: this.board  
-      });
+      state.boardId = this.board;
     }
+    this.state = state;
   }
   saveAuthor(author){
     this.author = author;
@@ -34,22 +31,24 @@ class App extends React.Component {
       authorName: author.name
     });
   }
-  saveName(authorName) {
+  saveName = (authorName) => {
     let author = {name: authorName};
     localStorage.setItem("author", JSON.stringify(author));
     this.saveAuthor(author);
   }
   render() {
+    const {answerName, boardId, authorName} = this.state;
+    
     return (
       <div>
         { () => {
-            if(this.state.answerName) {
+            if(answerName) {
               return <PopupAnswer saveName={this.saveName}/>; 
             } else {
               return (
                 <div>
-                  <div> Hello, {this.state.authorName} </div>
-                  <Board id = {this.state.boardId}/>
+                  <div> Hello, {authorName} </div>
+                  <Board id = {boardId}/>
                 </div>
                 );
             }

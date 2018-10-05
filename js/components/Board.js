@@ -2,12 +2,16 @@ import React from '/../../lib/node_modules/react';
 import Col from 'Col';
 
 //ready to check and check phase render
-export default class Board extends React.Component {
+class Board extends React.Component {
     constructor(props) {
         super(props);
+        this.state = getNewPeaceState(props);
     }
     componentWillReceiveProps(nextProps) {
         if(this.id && (nextProps.id === this.id)) return;
+        this.setState(getNewPeaceState(nextProps));
+    }
+    getNewPeaceState(nextProps){
         this.id = nextProps.id;
         this.board = JSON.parse(localStorage.getItem("board_" + this.id));
         if(this.board.cols.length === 0) {
@@ -22,20 +26,26 @@ export default class Board extends React.Component {
                 id++;
                 col.id = id;
                 col.cards = [];
+                col.BoardId = this.id;
                 localStorage.setItem("col_" + id, col)
             });
             localStorage.setItem("last_id", id);
             localStorage.setItem("board_" + this.id, this.board)
         }
-        this.state = { cols: this.board.cols};
+        return { cols: this.board.cols};
     }
+    
     render() {
-      return (
-        <div>
-          {this.state.cols.map( function(col) {
-            return <Col name = {col.name} />;
-          })}
-        </div>
-      );
+        const {cols} = this.state;
+    
+        return (
+            <div>
+                {cols.map( (col) => {
+                    return <Col name = {col.name} />;
+                })}
+            </div>
+        );
     }
 }
+
+export default Board;

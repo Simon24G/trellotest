@@ -2,26 +2,28 @@ import React from '/../../lib/node_modules/react';
 import CardIcon from 'CardIcon';
 
 //ready to check and check phase render
-export default class Col extends React.Component {
+class Col extends React.Component {
     constructor(props) {
         super(props);
-        this.delete = (id) => {this.delete(id)};
-        this.add = () => this.add();
-        this.changeNameCol = (elem) => this.changeNameCol(elem);
         this.author = JSON.parse(localStorage.getItem("author"));
+        this.state = getNewPeaceState(props);
     }
     componentWillReceiveProps(nextProps) {
         if(this.id && (nextProps.id === this.id)) return;
+        this.setState(getNewPeaceState(nextProps));
+    }
+    getNewPeaceState(nextProps) {
         this.id = nextProps.id;
         let col = JSON.parse(localStorage.getItem("col_" + this.id));
-  
+
         this.cards = col.cards;
         this.setState({
             cards: this.cards,
             name: col.name
         });
-    }  
-    delete(id){
+    }
+  
+    delete = (id) => {
         let col = JSON.parse(localStorage.getItem("col_" + id));
         for(let index = 0; index < col.cards.length; index++){
             if(col.cards[index].id == elem.id){
@@ -33,13 +35,13 @@ export default class Col extends React.Component {
             cards: col.cards
         });
     }
-    changeNameCol(elem){
+    changeNameCol = (elem) => {
         let col = JSON.parse(localStorage.getItem("col_" + this.id));
         col.name = elem.value;
         localStorage.setItem("col_" + this.id, JSON.stringify(col));
         this.setState({name: col.name});
     }
-    add(){
+    add = () => {
         const nextId = localStorage.getItem("last_id") + 1;
         const card = {
             id: nextId,
@@ -61,16 +63,18 @@ export default class Col extends React.Component {
         //Stores.commentStore.add(comment) with generated id???
     }
     render() {
+        const {name, cards} = this.state;
+
         return (
             <div>
                 <form action={this.changeNameCol}>
                     <p>
-                        <h>{this.state.name}</h>
+                        <h>{name}</h>
                     </p>
                 </form>
                 <div>
-                    {this.state.cards.map( function(card) {
-                        return <CardIcon colName={this.state.name} id={card.id} delete={this.delete}/>;
+                    {cards.map( (card) => {
+                        return <CardIcon colName={name} id={card.id} delete={this.delete}/>;
                     })}
                 </div>
                 <p>Вставьте новую карточку <input type="button" onClick={this.add} value="+"/></p>
@@ -78,3 +82,5 @@ export default class Col extends React.Component {
         );
     }//may be better to push { () => updateName() }
 }
+
+export default Col;

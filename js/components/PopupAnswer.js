@@ -1,7 +1,7 @@
 import React from '/../../lib/node_modules/react';
 
 //ready to check and check phase render
-export default class PopupAnswer extends React.Component {
+class PopupAnswer extends React.Component {
     constructor(props) {
         super(props);
         this.saveName = (elem) => props.saveName(elem.name.value);
@@ -18,3 +18,5 @@ export default class PopupAnswer extends React.Component {
         );
     }
 }  
+
+export default PopupAnswer;
