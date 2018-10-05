@@ -17,6 +17,7 @@ export default class CardIcon extends React.Component {
     this.close = () => this.close;
   }
   componentWillReceiveProps(nextProps){
+    this.setState({colName: nextProps.colName});
     if(this.id && (nextProps.id === this.id)) return;
     this.id = nextProps.id;
     this.update();
@@ -45,7 +46,7 @@ export default class CardIcon extends React.Component {
     });   
   }
   render() {
-    const card = this.state.isOpenCard ? <Card id={this.id} close={this.close} delete={this.delete} update={this.update}/> : null;
+    const card = this.state.isOpenCard ? <Card id={this.id} colName={this.state.colName} close={this.close} delete={this.delete} update={this.update}/> : null;
   
     return (
       <div>

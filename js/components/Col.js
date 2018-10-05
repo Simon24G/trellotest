@@ -8,6 +8,7 @@ export default class Col extends React.Component {
         this.delete = (id) => {this.delete(id)};
         this.add = () => this.add();
         this.changeNameCol = (elem) => this.changeNameCol(elem);
+        this.author = JSON.parse(localStorage.getItem("author"));
     }
     componentWillReceiveProps(nextProps) {
         if(this.id && (nextProps.id === this.id)) return;
@@ -15,20 +16,6 @@ export default class Col extends React.Component {
         let col = JSON.parse(localStorage.getItem("col_" + this.id));
   
         this.cards = col.cards;
-        if(this.cards.length === 0) {
-            this.cards = [
-                {id: 1, name: "card 1"},
-                {id: 2, name: "card 2"},
-                {id: 3, name: "card 3"},
-                {id: 4, name: "card 4"}
-            ];
-            this.cards.forEach(card => {
-                card.colId = this.id; 
-                localStorage.setItem("card_" + card.id, JSON.stringify(card));
-            });
-            col.cards = this.cards.map((card) => {return {id: card.id};});
-            localStorage.setItem("col_" + this.id, JSON.stringify(col));
-        }
         this.setState({
             cards: this.cards,
             name: col.name
@@ -58,6 +45,7 @@ export default class Col extends React.Component {
             id: nextId,
             text: "", 
             colId: this.id,
+            authorId: this.author.id,
             comments: [] 
         };
         localStorage.setItem("card_" + nextId, JSON.stringify(card));
@@ -82,11 +70,11 @@ export default class Col extends React.Component {
                 </form>
                 <div>
                     {this.state.cards.map( function(card) {
-                        return <CardIcon id = {card.id} delete={this.delete}/>;
+                        return <CardIcon colName={this.state.name} id={card.id} delete={this.delete}/>;
                     })}
                 </div>
                 <p>Вставьте новую карточку <input type="button" onClick={this.add} value="+"/></p>
             </div>
         );
-    }
+    }//may be better to push { () => updateName() }
 }

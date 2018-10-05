@@ -3,6 +3,7 @@ import ReactDOM from '/lib/node_modules/react-dom';
 import Board from '/components/Board';
 import PopupAnswer from '/components/PopupAnswer';
 
+//const AuthorContext = React.createContext();
 
 class App extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class App extends React.Component {
     this.board = JSON.parse(localStorage.getItem("board"));
     if(this.board === null) {
       this.board = {id: 1, name: begin};
-      localStorage.setItem("board",JSON.stringify(this.board))
+      localStorage.setItem("board",JSON.stringify(this.board));
       this.setState({ 
         boardId: this.board  
       });

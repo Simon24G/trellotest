@@ -16,8 +16,10 @@ export default class Card extends React.Component {
         this.changeDescriptionCard = (elem) => this.changeDescriptionCard(elem);
         this.deleteComment = (elem) => { this.removeComment(elem) };
         this.add = (elem) => { this.addComment(elem) };
+        this.author = JSON.parse(localStorage.getItem("author"));
     }
     componentWillReceiveProps(nextProps){
+        this.setState({colName: nextProps.colName});
         if(this.id && (nextProps.id === this.id)) return;    
         this.card = JSON.stringify(localStorage.getItem("card_" + nextProps.id));
         let comments = this.card.comments;
@@ -32,11 +34,11 @@ export default class Card extends React.Component {
             id: nextId,
             text: commentText, 
             cardId : this.card.id,
-            authorId : Global_Author.id
+            authorId : this.author.id
         };
         localStorage.setItem("comment_" + nextId, JSON.stringify(comment));
         
-        let author = JSON.parse(localStorage.getItem("author_" + Global_Author.id));
+        let author = JSON.parse(localStorage.getItem("author_" + this.author.id));
         author.comments.push({id: nextId});
         localStorage.setItem("author_" + Global_Author.id, JSON.stringify(author));
         
@@ -97,12 +99,15 @@ export default class Card extends React.Component {
     render(){
         return (
         <div className="popupCard">
-            <form action={this.changeNameCard}>
-                <p>
-                    <h>{this.state.name}</h>
-                    <input type="button" onClick={this.close} value="Close"/>
-                </p>
-            </form>
+            <p>
+                <form action={this.changeNameCard}>
+                        <h>{this.state.name}</h>
+                </form>
+                <h>Name col: {this.state.colName}</h>
+                <h>Author: {this.author.id}</h>
+                <input type="button" onClick={this.close} value="Close"/>
+            </p>
+            
             <form action={this.changeDescriptionCard}>
               <textarea rows="10" cols="45" name="text">{this.state.description}</textarea>
             </form>
