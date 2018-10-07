@@ -15,11 +15,11 @@ class Comment extends React.Component {
   }
   getNewPeaceState(nextProps) {
     this.id = nextProps.id;
-    const comment = JSON.parse(localStorage.getItem("comment_" + this.id));
+    const comment1 = JSON.parse(localStorage.getItem("comment_" + this.id));
     this.author = JSON.parse(
-      localStorage.getItem("author_" + comment.authorId)
+      localStorage.getItem("author_" + comment1.authorId)
     );
-    return { comment: nextProps.comment, authorName: this.author.name };
+    return { comment: comment1, authorName: this.author.name };
   }
 
   updateComment = elem => {

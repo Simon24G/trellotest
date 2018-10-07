@@ -10,20 +10,22 @@ class Card extends Component {
     this.close = props.close;
     this.delete = props.delete;
     this.update = props.update;
-
     this.author = JSON.parse(localStorage.getItem("author"));
-    this.state = this.getNewPeaceState(props);
-    // or to add argument key === 1 || 2 : 1 - set, 2 - =
+
+    this.id = props.id;
+    this.card = JSON.parse(localStorage.getItem("card_" + this.id));
+    let comments = this.card.comments;
+    this.state = {
+      name: this.card.name,
+      description: this.card.description,
+      colName: props.colName,
+      comments: comments
+    }; // or to add argument key === 1 || 2 : 1 - set, 2 - =
   }
 
   componentWillReceiveProps(nextProps) {
     let newState = this.getNewPeaceState(nextProps);
-    if (newState !== 0)
-      this.setState({
-        name: this.card.name,
-        description: this.card.description,
-        comments: this.card.comments
-      });
+    if (newState !== 0) this.setState(newState);
   }
 
   getNewPeaceState(nextProps) {
@@ -36,6 +38,7 @@ class Card extends Component {
       let comments = this.card.comments;
       if (!!comments) comments = []; /// is == null || length==0
       this.id = nextProps.id;
+      alert(this.id);
       state = {
         name: this.card.name,
         description: this.card.description,
@@ -51,9 +54,12 @@ class Card extends Component {
     return countState === 0 ? 0 : state; // i don't found is_empty_object
   }
 
-  addComment = elem => {
-    let commentText = elem.value;
-    const nextId = localStorage.getItem("last_id") + 1;
+  addComment = event => {
+    event.preventDefault();
+    let commentText = this.refs.text.value; //elem.value;
+
+    const nextId = 1 + localStorage.getItem("last_id");
+    localStorage.setItem("last_id", nextId);
     const comment = {
       id: nextId,
       text: commentText,
@@ -67,13 +73,18 @@ class Card extends Component {
     localStorage.setItem("author_" + this.author.id, JSON.stringify(author));
 
     //let card = JSON.parse(localStorage.getItem("card_" + this.id));
-    localStorage.setItem("last_id", nextId);
+    //запутался
+    let card = JSON.parse(localStorage.getItem("card_" + this.card.id));
+    card.comments.push({ id: nextId });
+    localStorage.setItem("card_" + this.card.id, JSON.stringify(card));
 
-    this.card.comments.push({ id: nextId }); // auto update this.state.comments
-    localStorage.setItem("card_" + this.card.id, JSON.stringify(this.card));
+    alert(JSON.stringify(this.state.comments));
+
     this.setState(prevState => {
+      prevState.comments.push(comment);
       return { comments: prevState.comments };
     });
+    alert(localStorage.getItem("comment_" + nextId));
     this.update();
     //Stores.commentStore.add(comment) with generated id???
   };
@@ -101,44 +112,82 @@ class Card extends Component {
     });
     this.update();
   };
-  /*
-    changeNameCard = (elem) => {
-        ...
-    }
-    */
-  changeNameCard = elem => {
+
+  changeContentCard = event => {
+    event.preventDefault();
     let card = JSON.parse(localStorage.getItem("card_" + this.id));
-    card.name = elem.value;
+    card.description = this.refs.description.value; //elem.value;
+    card.name = this.refs.name.value; //elem.value;
     localStorage.setItem("card_" + this.id, JSON.stringify(card));
-    this.setState({ name: card.name });
-    this.update();
-  };
-  changeDescriptionCard = elem => {
-    let card = JSON.parse(localStorage.getItem("card_" + this.id));
-    card.description = elem.value;
-    localStorage.setItem("card_" + this.id, JSON.stringify(card));
+    alert(JSON.stringify(card));
     this.setState({ description: card.description });
     this.update();
   };
 
   render() {
     const { name, colName, description, comments } = this.state;
-
     return (
       <div className="popupCard">
         <p>
-          <form action={this.changeNameCard}>
-            <h>{name}</h>
+          <h>Name col: {colName}</h>
+          <h>Author: {this.author.name}</h>
+          <button type="button" onClick={this.close}>
+            Close
+          </button>
+          <form onSubmit={this.changeContentCard}>
+            <p>Name:</p>
+            <input type="text" ref="name" value={name} />
+            <p>Description</p>
+            <textarea
+              rows="5"
+              cols="90"
+              name="description"
+              ref="description"
+              value={description}
+            />
+            <input value="Save" type="submit" />
+          </form>
+        </p>
+
+        <input type="button" onClick={this.delete} value="Delete Card" />
+
+        {comments.map(comment => {
+          return <Comment id={comment.id} removeComment={this.removeComment} />;
+        })}
+
+        <form onSubmit={this.addComment}>
+          <p>
+            <b>Введите ваш комментарий:</b>
+          </p>
+          <p>
+            <textarea rows="5" cols="45" name="text" ref="text" />
+          </p>
+          <p>
+            <input type="submit" value="Оставить" />
+          </p>
+        </form>
+      </div>
+    );
+  }
+}
+/*
+     <p>
+          <form onSubmit={this.changeNameCard}>
+            <p>Name</p>
+            <input type="text">{name}</input>
+            <input value="Ok!" type="submit" />
           </form>
           <h>Name col: {colName}</h>
           <h>Author: {this.author.name}</h>
-          <input type="button" onClick={this.close} value="Close" />
+          <button type="button" onClick={this.close} value="Close" />
         </p>
 
-        <form action={this.changeDescriptionCard}>
-          <textarea rows="10" cols="45" name="text">
+        <form onSubmit={this.changeDescriptionCard}>
+          <p>Description</p>
+          <textarea rows="10" cols="45" name="description" ref="description">
             {description}
           </textarea>
+          <input value="Ok!" type="submit" />
         </form>
         <input type="button" onClick={this.delete} value="Delete" />
 
@@ -157,9 +206,18 @@ class Card extends Component {
             <input type="submit" value="Оставить" />
           </p>
         </form>
-      </div>
-    );
-  }
-}
+   
 
+
+
+
+
+
+<textarea rows="10" cols="45" name="description" ref="description">
+            {description}
+          </textarea>
+          
+  <button type="submit">Ok!</button>
+        
+*/
 export default Card;

@@ -15,20 +15,23 @@ class Col extends React.Component {
   getNewPeaceState(nextProps) {
     this.id = nextProps.id;
     let col = JSON.parse(localStorage.getItem("col_" + this.id));
-
+    //JSON.parse(localStorage.getItem("col_" + this.id));
     this.cards = col.cards;
-    this.setState({
+    return {
       cards: this.cards,
       name: col.name
-    });
+    };
   }
 
   delete = id => {
-    let col = JSON.parse(localStorage.getItem("col_" + id));
+    let col = JSON.parse(localStorage.getItem("col_" + this.id));
+    alert(col);
     for (let index = 0; index < col.cards.length; index++) {
       if (col.cards[index].id === id) {
         col.cards.splice(index, 1);
         localStorage.setItem("col_" + id, JSON.stringify(col));
+        alert(col);
+        break;
       }
     }
     this.setState({
@@ -56,7 +59,6 @@ class Col extends React.Component {
     col.cards.push({ id: nextId });
     localStorage.setItem("col_" + this.id, JSON.stringify(col));
     localStorage.setItem("last_id", nextId);
-
     this.setState({
       cards: col.cards
     });

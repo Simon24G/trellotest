@@ -27,10 +27,13 @@ class CardIcon extends React.Component {
   }
   update = () => {
     const card = JSON.parse(localStorage.getItem("card_" + this.id));
-    this.setState({
-      name: card.name,
-      description: card.description,
-      countComments: card.comments.length
+    alert(card.comments.length);
+    this.setState(prevState => {
+      return {
+        name: card.name,
+        description: card.description,
+        countComments: 1
+      };
     });
   };
   open = () => {
@@ -44,7 +47,7 @@ class CardIcon extends React.Component {
     });
   };
   render() {
-    const { isOpenCard } = this.state;
+    const { isOpenCard, countComments } = this.state;
     return (
       <div>
         {isOpenCard && (
@@ -62,7 +65,7 @@ class CardIcon extends React.Component {
         </p>
         <p>
           <p>{this.state.description}</p>
-          <h>Comments: {this.state.countComments}</h>
+          <h>Comments: {countComments}</h>
         </p>
       </div>
     );

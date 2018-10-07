@@ -14,7 +14,10 @@ class Board extends React.Component {
   getNewPeaceState(nextProps) {
     this.id = nextProps.id;
     this.board = JSON.parse(localStorage.getItem("board_" + this.id));
-    if (this.board.cols.length === 0) {
+    //this.board = JSON.parse(localStorage.getItem("board_" + this.id));
+    if (this.board == null || true) {
+      //this.board.cols.length === 0) {
+      this.board = {};
       this.board.cols = [
         { name: "TODO" },
         { name: "In Progress" },
@@ -22,15 +25,16 @@ class Board extends React.Component {
         { name: "Done" }
       ];
       let id = localStorage.getItem("last_id");
+      this.board.id = id;
       this.board.cols.forEach(col => {
         id++;
         col.id = id;
         col.cards = [];
         col.BoardId = this.id;
-        localStorage.setItem("col_" + id, col);
+        localStorage.setItem("col_" + id, JSON.stringify(col));
       });
       localStorage.setItem("last_id", id);
-      localStorage.setItem("board_" + this.id, this.board);
+      localStorage.setItem("board_" + this.id, JSON.stringify(this.board));
     }
     return { cols: this.board.cols };
   }
@@ -41,7 +45,7 @@ class Board extends React.Component {
     return (
       <div>
         {cols.map(col => {
-          return <Col name={col.name} />;
+          return <Col id={col.id} />;
         })}
       </div>
     );

@@ -4,15 +4,22 @@ import React from "react";
 class PopupAnswer extends React.Component {
   constructor(props) {
     super(props);
-    this.saveName = elem => props.saveName(elem.name.value);
+    this.saveName = event => {
+      event.preventDefault();
+      // alert(this.refs["name"].value);
+      // alert(JSON.stringify(elem));
+      props.saveName(this.refs["name"].value);
+    };
+    //
   }
+
   render() {
     return (
       <div>
-        <form action={this.saveName}>
+        <form onSubmit={this.saveName}>
           <div>Как вас звать?</div>
-          <input name="name" type="text" />
-          <input type="submit">Вот он я!</input>
+          <input name="name" ref="name" type="text" />
+          <input value="Вот он я!" type="submit" />
         </form>
       </div>
     );
@@ -20,3 +27,11 @@ class PopupAnswer extends React.Component {
 }
 
 export default PopupAnswer;
+/*
+     <button type="submit">Вот он я!</button>
+     
+<form action={this.saveName}>
+        
+
+        
+*/
