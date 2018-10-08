@@ -25,12 +25,12 @@ class Col extends React.Component {
 
   delete = id => {
     let col = JSON.parse(localStorage.getItem("col_" + this.id));
-    alert(col);
+    //alert(id);
     for (let index = 0; index < col.cards.length; index++) {
       if (col.cards[index].id === id) {
         col.cards.splice(index, 1);
-        localStorage.setItem("col_" + id, JSON.stringify(col));
-        alert(col);
+        localStorage.setItem("col_" + this.id, JSON.stringify(col));
+        alert("after delete: " + localStorage.getItem("col_" + this.id));
         break;
       }
     }
@@ -45,7 +45,7 @@ class Col extends React.Component {
     this.setState({ name: col.name });
   };
   add = () => {
-    const nextId = localStorage.getItem("last_id") + 1;
+    const nextId = 1 + +localStorage.getItem("last_id");
     const card = {
       id: nextId,
       text: "",
@@ -54,11 +54,11 @@ class Col extends React.Component {
       comments: []
     };
     localStorage.setItem("card_" + nextId, JSON.stringify(card));
-
     let col = JSON.parse(localStorage.getItem("col_" + this.id));
     col.cards.push({ id: nextId });
     localStorage.setItem("col_" + this.id, JSON.stringify(col));
     localStorage.setItem("last_id", nextId);
+
     this.setState({
       cards: col.cards
     });
@@ -66,7 +66,6 @@ class Col extends React.Component {
   };
   render() {
     const { name, cards } = this.state;
-
     return (
       <div>
         <form action={this.changeNameCol}>

@@ -8,19 +8,29 @@ class Card extends Component {
   constructor(props) {
     super(props);
     this.close = props.close;
-    this.delete = props.delete;
+    this.delete = () => {
+      props.delete();
+      this.close();
+    };
     this.update = props.update;
     this.author = JSON.parse(localStorage.getItem("author"));
 
     this.id = props.id;
     this.card = JSON.parse(localStorage.getItem("card_" + this.id));
+    const author = JSON.parse(
+      localStorage.getItem("author_" + this.card.authorId)
+    );
+    alert(JSON.stringify(author));
     let comments = this.card.comments;
     this.state = {
       name: this.card.name,
       description: this.card.description,
       colName: props.colName,
+      authorName: author.name,
       comments: comments
-    }; // or to add argument key === 1 || 2 : 1 - set, 2 - =
+    };
+    //aler
+    // or to add argument key === 1 || 2 : 1 - set, 2 - =
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,13 +45,17 @@ class Card extends Component {
       state = {};
     } else {
       this.card = JSON.stringify(localStorage.getItem("card_" + nextProps.id));
+      const author = JSON.parse(
+        localStorage.getItem("author_" + this.card.authorId)
+      );
+
       let comments = this.card.comments;
       if (!!comments) comments = []; /// is == null || length==0
       this.id = nextProps.id;
-      alert(this.id);
       state = {
         name: this.card.name,
         description: this.card.description,
+        author: author.name,
         comments: comments
       };
       countState = 3;
@@ -58,7 +72,7 @@ class Card extends Component {
     event.preventDefault();
     let commentText = this.refs.text.value; //elem.value;
 
-    const nextId = 1 + localStorage.getItem("last_id");
+    const nextId = 1 + +localStorage.getItem("last_id");
     localStorage.setItem("last_id", nextId);
     const comment = {
       id: nextId,
@@ -77,22 +91,18 @@ class Card extends Component {
     let card = JSON.parse(localStorage.getItem("card_" + this.card.id));
     card.comments.push({ id: nextId });
     localStorage.setItem("card_" + this.card.id, JSON.stringify(card));
-
-    alert(JSON.stringify(this.state.comments));
-
-    this.setState(prevState => {
-      prevState.comments.push(comment);
-      return { comments: prevState.comments };
-    });
-    alert(localStorage.getItem("comment_" + nextId));
+    let comments = this.state.comments;
+    //проверка добавления карточек
+    comments.push(comment);
+    this.setState({ comments: comments });
     this.update();
     //Stores.commentStore.add(comment) with generated id???
   };
   removeComment = elem => {
     localStorage.removeItem("comment_" + elem.id);
-
+    alert("delete comment: " + elem.id);
     let author = JSON.parse(localStorage.getItem("author_" + elem.authorId));
-
+    alert(JSON.stringify(author));
     for (let index = 0; index < author.comments.length; index++) {
       if (author.comments[index].id === elem.id) {
         author.comments.splice(index, 1);
@@ -108,7 +118,7 @@ class Card extends Component {
     }
 
     this.setState(prevState => {
-      return { comments: prevState.comments };
+      return { comments: this.card.comments };
     });
     this.update();
   };
@@ -119,18 +129,22 @@ class Card extends Component {
     card.description = this.refs.description.value; //elem.value;
     card.name = this.refs.name.value; //elem.value;
     localStorage.setItem("card_" + this.id, JSON.stringify(card));
-    alert(JSON.stringify(card));
     this.setState({ description: card.description });
+    this.setState({ name: card.name });
+
     this.update();
   };
 
   render() {
-    const { name, colName, description, comments } = this.state;
+    const { name, colName, description, comments, authorName } = this.state;
+    alert("Render card: " + JSON.stringify(this.state));
     return (
       <div className="popupCard">
         <p>
-          <h>Name col: {colName}</h>
-          <h>Author: {this.author.name}</h>
+          <h>
+            Card name: {name}. Col name: {colName}. Author Card name:{" "}
+            {authorName}
+          </h>
           <button type="button" onClick={this.close}>
             Close
           </button>
@@ -138,22 +152,19 @@ class Card extends Component {
             <p>Name:</p>
             <input type="text" ref="name" value={name} />
             <p>Description</p>
-            <textarea
-              rows="5"
-              cols="90"
-              name="description"
-              ref="description"
-              value={description}
-            />
+            <input type="text" ref="description" value={description} />
             <input value="Save" type="submit" />
           </form>
         </p>
 
         <input type="button" onClick={this.delete} value="Delete Card" />
-
-        {comments.map(comment => {
-          return <Comment id={comment.id} removeComment={this.removeComment} />;
-        })}
+        <p>
+          {comments.map(comment => {
+            return (
+              <Comment id={comment.id} removeComment={this.removeComment} />
+            );
+          })}
+        </p>
 
         <form onSubmit={this.addComment}>
           <p>
@@ -171,6 +182,16 @@ class Card extends Component {
   }
 }
 /*
+
+<textarea
+              rows="5"
+              cols="90"
+              ref="description"
+              value={description}
+            />
+
+
+
      <p>
           <form onSubmit={this.changeNameCard}>
             <p>Name</p>

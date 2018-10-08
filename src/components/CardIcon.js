@@ -27,12 +27,12 @@ class CardIcon extends React.Component {
   }
   update = () => {
     const card = JSON.parse(localStorage.getItem("card_" + this.id));
-    alert(card.comments.length);
+    //alert(card.comments.length);
     this.setState(prevState => {
       return {
         name: card.name,
         description: card.description,
-        countComments: 1
+        countComments: card.comments.length
       };
     });
   };
