@@ -11,6 +11,7 @@ class PopupAnswer extends React.Component {
       props.saveName(this.refs["name"].value);
     };
     //
+    this.state = { mv: "12d" };
   }
 
   render() {
@@ -18,7 +19,7 @@ class PopupAnswer extends React.Component {
       <div>
         <form onSubmit={this.saveName}>
           <div>Как вас звать?</div>
-          <input name="name" ref="name" type="text" />
+          <input ref="name" type="text" />
           <input value="Вот он я!" type="submit" />
         </form>
       </div>

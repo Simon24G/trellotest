@@ -49,7 +49,7 @@ class CardIcon extends React.Component {
   render() {
     const { isOpenCard, countComments } = this.state;
     return (
-      <div>
+      <div className="CardIcon">
         {isOpenCard && (
           <Card
             id={this.id}
@@ -60,12 +60,13 @@ class CardIcon extends React.Component {
           />
         )}
         <p>
-          <h>{this.state.name}</h>
-          <input type="button" onClick={this.open} value="Open" />
+          <h>Name card: {this.state.name}</h>
         </p>
+        <p>Description:</p>
+        <textarea rows="5" cols="25" readonly value={this.state.description} />
         <p>
-          <p>{this.state.description}</p>
-          <h>Comments: {countComments}</h>
+          Comments: {countComments} {"  "}
+          <input type="button" onClick={this.open} value="Open" />
         </p>
       </div>
     );
@@ -74,3 +75,12 @@ class CardIcon extends React.Component {
 }
 
 export default CardIcon;
+
+/*
+<p white-space="pre">{this.state.description}</p>
+
+<textarea rows="5" cols="30" ref="description" white-space="pre-wrap">
+            {this.state.description}
+          </textarea>
+
+*/

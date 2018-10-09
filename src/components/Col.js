@@ -70,7 +70,7 @@ class Col extends React.Component {
       <div>
         <form action={this.changeNameCol}>
           <p>
-            <h>{name}</h>
+            <h>Name Col: {name}</h>
           </p>
         </form>
         <div>

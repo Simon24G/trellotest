@@ -34,6 +34,7 @@ class Card extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    alert("fail");
     let newState = this.getNewPeaceState(nextProps);
     if (newState !== 0) this.setState(newState);
   }
@@ -139,7 +140,7 @@ class Card extends Component {
     const { name, colName, description, comments, authorName } = this.state;
     alert("Render card: " + JSON.stringify(this.state));
     return (
-      <div className="popupCard">
+      <div className="PopupCard">
         <p>
           <h>
             Card name: {name}. Col name: {colName}. Author Card name:{" "}
@@ -150,9 +151,16 @@ class Card extends Component {
           </button>
           <form onSubmit={this.changeContentCard}>
             <p>Name:</p>
-            <input type="text" ref="name" value={name} />
+            <label>
+              <input type="text" ref="name" defaultValue={name} />
+            </label>
             <p>Description</p>
-            <input type="text" ref="description" value={description} />
+            <textarea
+              rows="5"
+              cols="90"
+              ref="description"
+              defaultValue={description}
+            />
             <input value="Save" type="submit" />
           </form>
         </p>
@@ -182,6 +190,18 @@ class Card extends Component {
   }
 }
 /*
+  <input type="text" name="name" ref="name" /> //Why is nessacery attribute name here?  
+            
+
+
+           <label>
+              <input type="text" ref="name" value={name} />
+            </label>
+            <p>Description</p>
+            <input type="text" ref="description" value={description} />
+ 
+
+
 
 <textarea
               rows="5"
