@@ -1,5 +1,7 @@
 .CardIcon {
   background-color: rgb(28, 233, 10);
-  border-radius: 5px;
+  border-radius: 15px;
   border-width: 2px;
+  width: 220px;
+  margin: 0 auto;
 }

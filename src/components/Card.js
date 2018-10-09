@@ -20,7 +20,6 @@ class Card extends Component {
     const author = JSON.parse(
       localStorage.getItem("author_" + this.card.authorId)
     );
-    alert(JSON.stringify(author));
     let comments = this.card.comments;
     this.state = {
       name: this.card.name,
@@ -34,7 +33,6 @@ class Card extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    alert("fail");
     let newState = this.getNewPeaceState(nextProps);
     if (newState !== 0) this.setState(newState);
   }
@@ -72,6 +70,7 @@ class Card extends Component {
   addComment = event => {
     event.preventDefault();
     let commentText = this.refs.text.value; //elem.value;
+    if (commentText === "") return;
 
     const nextId = 1 + +localStorage.getItem("last_id");
     localStorage.setItem("last_id", nextId);
@@ -101,22 +100,22 @@ class Card extends Component {
   };
   removeComment = elem => {
     localStorage.removeItem("comment_" + elem.id);
-    alert("delete comment: " + elem.id);
     let author = JSON.parse(localStorage.getItem("author_" + elem.authorId));
-    alert(JSON.stringify(author));
     for (let index = 0; index < author.comments.length; index++) {
       if (author.comments[index].id === elem.id) {
         author.comments.splice(index, 1);
         localStorage.setItem("author_" + elem.authorId, JSON.stringify(author));
       }
     }
-
+    this.card.comments = this.card.comments.filter(e => e.id !== elem.id);
+    localStorage.setItem("card_" + this.card.id, JSON.stringify(this.card));
+    /*
     for (let index = 0; index < this.card.comments.length; index++) {
       if (this.card.comments[index].id === elem.id) {
         this.card.comments.splice(index, 1); //TODO: CHECK: auto update this.state.comments
         localStorage.setItem("card_" + this.card.id, JSON.stringify(this.card));
       }
-    }
+    }*/
 
     this.setState(prevState => {
       return { comments: this.card.comments };
@@ -138,7 +137,6 @@ class Card extends Component {
 
   render() {
     const { name, colName, description, comments, authorName } = this.state;
-    alert("Render card: " + JSON.stringify(this.state));
     return (
       <div className="PopupCard">
         <p>
@@ -176,13 +174,13 @@ class Card extends Component {
 
         <form onSubmit={this.addComment}>
           <p>
-            <b>Введите ваш комментарий:</b>
+            <b>Add comment:</b>
           </p>
           <p>
             <textarea rows="5" cols="45" name="text" ref="text" />
           </p>
           <p>
-            <input type="submit" value="Оставить" />
+            <input type="submit" value="ok" />
           </p>
         </form>
       </div>

@@ -7,19 +7,12 @@ class Comment extends React.Component {
     this.state = this.getNewPeaceState(props);
   }
   componentWillReceiveProps(nextProps) {
-    alert(
-      "Update comment with id = " +
-        this.id +
-        " newProps = " +
-        JSON.stringify(nextProps)
-    );
     if (this.id && nextProps.id === this.id) return;
     this.setState(this.getNewPeaceState(nextProps));
   }
   getNewPeaceState(nextProps) {
     this.id = nextProps.id;
     const comment1 = JSON.parse(localStorage.getItem("comment_" + this.id));
-    alert(localStorage.getItem("comment_" + this.id));
     this.delete = () => {
       nextProps.removeComment(comment1);
     };
@@ -29,30 +22,30 @@ class Comment extends React.Component {
     return { comment: comment1, authorName: this.author.name };
   }
 
-  updateComment = elem => {
-    //this.state.comment.text = elem.value;
+  updateComment = e => {
+    e.preventDefault();
+    const text = this.refs.text;
+    //no cool
+    let comment = this.state;
+    comment.text = text;
+    //alert(this.state.comment.text);
     localStorage.setItem(
       "comment_" + this.id,
       JSON.stringify(this.state.comment)
     );
     this.setState(prevState => {
+      prevState.comment.text = text;
       return { comment: prevState.comment };
     }); //nesseary???
   };
   render() {
     const { authorName, comment } = this.state;
-    alert(JSON.stringify(comment));
     return (
       <div>
         <p>Author: {authorName}</p>
-        <form>
-          <textarea
-            rows="5"
-            cols="25"
-            name="text"
-            onChange={this.updateComment}
-            value={comment.text}
-          />
+        <form onSubmit={this.updateComment}>
+          <textarea rows="5" cols="25" ref="text" defaultValue={comment.text} />
+          <button type="submit" value="save comment" />
         </form>
         <input type="button" onClick={this.delete} value="X" />
       </div>

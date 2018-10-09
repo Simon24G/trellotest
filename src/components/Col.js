@@ -30,7 +30,6 @@ class Col extends React.Component {
       if (col.cards[index].id === id) {
         col.cards.splice(index, 1);
         localStorage.setItem("col_" + this.id, JSON.stringify(col));
-        alert("after delete: " + localStorage.getItem("col_" + this.id));
         break;
       }
     }
@@ -67,7 +66,7 @@ class Col extends React.Component {
   render() {
     const { name, cards } = this.state;
     return (
-      <div>
+      <div className="Col">
         <form action={this.changeNameCol}>
           <p>
             <h>Name Col: {name}</h>
