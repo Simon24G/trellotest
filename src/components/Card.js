@@ -7,12 +7,6 @@ import Comment from "./Comment.js";
 class Card extends Component {
   constructor(props) {
     super(props);
-    this.close = props.close;
-    this.delete = () => {
-      props.delete();
-      this.close();
-    };
-    this.update = props.update;
     this.author = JSON.parse(localStorage.getItem("author"));
 
     this.id = props.id;
@@ -31,6 +25,14 @@ class Card extends Component {
     //aler
     // or to add argument key === 1 || 2 : 1 - set, 2 - =
   }
+  close = () => {
+    if (this.state.name === "") this.props.delete();
+    this.props.close();
+  };
+  delete = () => {
+    this.props.delete();
+    this.props.close();
+  };
 
   componentWillReceiveProps(nextProps) {
     let newState = this.getNewPeaceState(nextProps);
@@ -95,7 +97,7 @@ class Card extends Component {
     //проверка добавления карточек
     comments.push(comment);
     this.setState({ comments: comments });
-    this.update();
+    this.props.update();
     //Stores.commentStore.add(comment) with generated id???
   };
   removeComment = elem => {
@@ -120,7 +122,7 @@ class Card extends Component {
     this.setState(prevState => {
       return { comments: this.card.comments };
     });
-    this.update();
+    this.props.update();
   };
 
   changeContentCard = event => {
@@ -132,7 +134,7 @@ class Card extends Component {
     this.setState({ description: card.description });
     this.setState({ name: card.name });
 
-    this.update();
+    this.props.update();
   };
 
   render() {
@@ -140,26 +142,49 @@ class Card extends Component {
     return (
       <div className="PopupCard">
         <p>
-          <h>
-            Card name: {name}. Col name: {colName}. Author Card name:{" "}
-            {authorName}
-          </h>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">Card name: {name}</li>
+              <li class="breadcrumb-item"> Col name: {colName} </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Author Card name: {authorName}{" "}
+              </li>
+            </ol>
+          </nav>
+
           <button type="button" onClick={this.close}>
             Close
           </button>
           <form onSubmit={this.changeContentCard}>
-            <p>Name:</p>
-            <label>
-              <input type="text" ref="name" defaultValue={name} />
-            </label>
-            <p>Description</p>
-            <textarea
-              rows="5"
-              cols="90"
-              ref="description"
-              defaultValue={description}
-            />
-            <input value="Save" type="submit" />
+            <div className="form-row">
+              <div className="col-md-2 mb-1">
+                <label for="nameCurrentCard">Name</label>
+                <input
+                  type="text"
+                  ref="name"
+                  className="form-control"
+                  id="nameCurrentCard"
+                  defaultValue={name}
+                  required
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="col-md-6 mb-4">
+                <label for="descriptionCurrentCard">Description</label>
+                <textarea
+                  ref="description"
+                  class="form-control"
+                  id="descriptionCurrentCard"
+                  rows="6"
+                  defaultValue={description}
+                  required
+                />
+              </div>
+            </div>
+            <button className="btn btn-primary" type="submit">
+              Save
+            </button>
           </form>
         </p>
 
@@ -188,6 +213,9 @@ class Card extends Component {
   }
 }
 /*
+          
+
+
   <input type="text" name="name" ref="name" /> //Why is nessacery attribute name here?  
             
 

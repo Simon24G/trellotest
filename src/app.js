@@ -7,7 +7,6 @@ import PopupAnswer from "./components/PopupAnswer.js";
 class App extends React.Component {
   constructor(props) {
     super(props);
-    localStorage.clear();
     let author = JSON.parse(localStorage.getItem("author"));
     let state = {};
     if (author !== null) {
@@ -42,6 +41,21 @@ class App extends React.Component {
 
     this.saveAuthor(author);
   };
+  clear = () => {
+    localStorage.clear();
+    this.setState({
+      answerName: true,
+      boardId: 1
+    });
+  };
+  logOut = () => {
+    localStorage.removeItem("author");
+    this.setState({
+      answerName: true,
+      boardId: 1
+    });
+  };
+
   render() {
     const { answerName, boardId, authorName } = this.state;
 
@@ -58,7 +72,26 @@ class App extends React.Component {
       </div>
     );
     //alert(answerName);
-    return <div>{element}</div>;
+    return (
+      <div>
+        <nav class="navbar fixed-top navbar-dark bg-primary">
+          <h class="navbar-brand">Task 1</h>
+          <div
+            class="btn-group my-2 my-lg-0"
+            role="group"
+            aria-label="Basic example"
+          >
+            <button type="button" onClick={this.clear} class="btn btn-light">
+              Clear
+            </button>
+            <button type="button" onClick={this.logOut} class="btn btn-light">
+              Log Out
+            </button>
+          </div>
+        </nav>
+        {element}
+      </div>
+    );
   }
 }
 

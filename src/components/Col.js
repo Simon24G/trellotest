@@ -19,7 +19,8 @@ class Col extends React.Component {
     this.cards = col.cards;
     return {
       cards: this.cards,
-      name: col.name
+      name: col.name,
+      isOpen: false
     };
   }
 
@@ -47,7 +48,8 @@ class Col extends React.Component {
     const nextId = 1 + +localStorage.getItem("last_id");
     const card = {
       id: nextId,
-      text: "",
+      name: "",
+      description: "",
       colId: this.id,
       authorId: this.author.id,
       comments: []
@@ -59,12 +61,13 @@ class Col extends React.Component {
     localStorage.setItem("last_id", nextId);
 
     this.setState({
-      cards: col.cards
+      cards: col.cards,
+      isOpen: true
     });
     //Stores.commentStore.add(comment) with generated id???
   };
   render() {
-    const { name, cards } = this.state;
+    const { name, cards, isOpen } = this.state;
     return (
       <div className="Col">
         <form action={this.changeNameCol}>
@@ -73,9 +76,21 @@ class Col extends React.Component {
           </p>
         </form>
         <div>
-          {cards.map(card => {
-            return (
-              <CardIcon colName={name} id={card.id} delete={this.delete} />
+          {cards.map((card, index) => {
+            return index + 1 < cards.length ? (
+              <CardIcon
+                colName={name}
+                isOpen="false"
+                id={card.id}
+                delete={this.delete}
+              />
+            ) : (
+              <CardIcon
+                colName={name}
+                isOpen={isOpen}
+                id={card.id}
+                delete={this.delete}
+              />
             );
           })}
         </div>

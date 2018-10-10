@@ -24,17 +24,12 @@ class Comment extends React.Component {
 
   updateComment = e => {
     e.preventDefault();
-    const text = this.refs.text;
-    //no cool
-    let comment = this.state;
-    comment.text = text;
-    //alert(this.state.comment.text);
-    localStorage.setItem(
-      "comment_" + this.id,
-      JSON.stringify(this.state.comment)
-    );
+    let comment = this.state.comment;
+    comment.text = this.refs.text.value;
+
+    localStorage.setItem("comment_" + this.id, JSON.stringify(comment));
     this.setState(prevState => {
-      prevState.comment.text = text;
+      //prevState.comment.text = text;
       return { comment: prevState.comment };
     }); //nesseary???
   };
@@ -45,9 +40,12 @@ class Comment extends React.Component {
         <p>Author: {authorName}</p>
         <form onSubmit={this.updateComment}>
           <textarea rows="5" cols="25" ref="text" defaultValue={comment.text} />
-          <button type="submit" value="save comment" />
+          <p>
+            <button type="submit">save change</button>
+            {"      "}
+            <input type="button" onClick={this.delete} value="X" />
+          </p>
         </form>
-        <input type="button" onClick={this.delete} value="X" />
       </div>
     );
   }
