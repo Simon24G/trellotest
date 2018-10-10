@@ -15,7 +15,7 @@ class Board extends React.Component {
     this.id = nextProps.id;
     this.board = JSON.parse(localStorage.getItem("board_" + this.id));
     //this.board = JSON.parse(localStorage.getItem("board_" + this.id));
-    if (this.board == null || true) {
+    if (this.board == null) {
       //this.board.cols.length === 0) {
       this.board = {};
       this.board.cols = [
@@ -35,6 +35,7 @@ class Board extends React.Component {
       });
       localStorage.setItem("last_id", id);
       localStorage.setItem("board_" + this.id, JSON.stringify(this.board));
+      localStorage.setItem("board", JSON.stringify(this.board));
     }
     return { cols: this.board.cols };
   }

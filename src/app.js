@@ -10,7 +10,10 @@ class App extends React.Component {
     let author = JSON.parse(localStorage.getItem("author"));
     let state = {};
     if (author !== null) {
-      this.saveAuthor(author);
+      this.author = author;
+      state.answerName = false;
+      state.boardId = 1;
+      state.authorName = author.name;
     } else {
       state.answerName = true;
     }
@@ -57,8 +60,8 @@ class App extends React.Component {
   };
 
   render() {
+    this.idc++;
     const { answerName, boardId, authorName } = this.state;
-
     const element = answerName ? (
       <div>
         {" "}
