@@ -102,7 +102,13 @@ class Col extends React.Component {
             </div>
             <p>
               Вставьте новую карточку{" "}
-              <input type="button" onClick={this.add} value="+" />
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={this.add}
+              >
+                +
+              </button>
             </p>
           </div>
         </div>

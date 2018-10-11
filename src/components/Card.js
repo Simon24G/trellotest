@@ -208,7 +208,7 @@ class Card extends Component {
                       <label for="descriptionCurrentCard">Description</label>
                       <textarea
                         onChange={this.descriptionChange}
-                        class="form-control"
+                        className="form-control"
                         id="descriptionCurrentCard"
                         rows="6"
                         defaultValue={description}
@@ -217,7 +217,7 @@ class Card extends Component {
                     </div>
                   </div>
                   <div
-                    class="btn-group"
+                    className="btn-group"
                     role="group"
                     aria-label="Basic example"
                   >
@@ -263,7 +263,9 @@ class Card extends Component {
                       </textarea>
                     </p>
                     <p>
-                      <input type="submit" value="ok" />
+                      <button type="submit" className="btn btn-info">
+                        OK
+                      </button>
                     </p>
                   </form>
                 </div>

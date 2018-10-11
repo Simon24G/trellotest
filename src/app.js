@@ -72,17 +72,25 @@ class App extends React.Component {
     );
     return (
       <div>
-        <nav class="navbar fixed-top navbar-dark bg-primary">
-          <h class="navbar-brand">Task 1</h>
+        <nav className="navbar fixed-top navbar-dark bg-primary">
+          <h className="navbar-brand">Task 1</h>
           <div
-            class="btn-group my-2 my-lg-0"
+            className="btn-group my-2 my-lg-0"
             role="group"
             aria-label="Basic example"
           >
-            <button type="button" onClick={this.clear} class="btn btn-light">
+            <button
+              type="button"
+              onClick={this.clear}
+              className="btn btn-light"
+            >
               Clear
             </button>
-            <button type="button" onClick={this.logOut} class="btn btn-light">
+            <button
+              type="button"
+              onClick={this.logOut}
+              className="btn btn-light"
+            >
               Log Out
             </button>
           </div>
