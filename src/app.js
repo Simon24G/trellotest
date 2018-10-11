@@ -73,7 +73,7 @@ class App extends React.Component {
     return (
       <div>
         <nav className="navbar fixed-top navbar-dark bg-primary">
-          <h className="navbar-brand">Task 1</h>
+          <h1 className="navbar-brand">Task 1</h1>
           <div
             className="btn-group my-2 my-lg-0"
             role="group"

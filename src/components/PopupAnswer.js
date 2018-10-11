@@ -19,9 +19,6 @@ class PopupAnswer extends React.Component {
   render() {
     return (
       <div>
-        <button type="button" className="btn btn-primary" onClick={this.popup}>
-          Launch demo modal
-        </button>
         <form onSubmit={this.saveName}>
           <div>Как вас звать?</div>
           <input onChange={this.nameChange} type="text" />

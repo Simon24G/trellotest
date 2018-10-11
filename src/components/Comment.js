@@ -1,6 +1,5 @@
 import React from "react";
 
-//ready to check and check phase render
 class Comment extends React.Component {
   constructor(props) {
     super(props);
@@ -55,10 +54,9 @@ class Comment extends React.Component {
           <textarea
             rows="5"
             cols="55"
-            defaultValue={textComment}
+            value={textComment}
             onChange={this.commentChange}
           />
-
           <p className="btn-group" role="group" aria-label="Basic example">
             <button className="btn btn-primary" type="submit">
               save change

@@ -168,10 +168,10 @@ class Card extends Component {
             <div className="modal-header">
               <h5 className="modal-title">
                 <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb">
-                    <li class="breadcrumb-item">Card name: {name}</li>
-                    <li class="breadcrumb-item"> Col name: {colName} </li>
-                    <li class="breadcrumb-item active" aria-current="page">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item">Card name: {name}</li>
+                    <li className="breadcrumb-item"> Col name: {colName} </li>
+                    <li className="breadcrumb-item active" aria-current="page">
                       Author Card name: {authorName}{" "}
                     </li>
                   </ol>
@@ -187,7 +187,7 @@ class Card extends Component {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body  square scrollbar-cyan bordered-cyan">
+            <div className="modal-body square scrollbar-cyan bordered-cyan">
               <p>
                 <form onSubmit={this.changeContentCard}>
                   <div className="form-row">
@@ -198,20 +198,22 @@ class Card extends Component {
                         onChange={this.nameChange}
                         className="form-control"
                         id="nameCurrentCard"
-                        defaultValue={name}
+                        value={name}
                         required
                       />
                     </div>
                   </div>
                   <div className="form-row">
                     <div className="col-md-6 mb-4">
-                      <label for="descriptionCurrentCard">Description</label>
+                      <label htmlFor="descriptionCurrentCard">
+                        Description
+                      </label>
                       <textarea
                         onChange={this.descriptionChange}
-                        className="form-control"
+                        className="form-control square scrollbar-cyan bordered-cyan"
                         id="descriptionCurrentCard"
                         rows="6"
-                        defaultValue={description}
+                        value={description}
                         required
                       />
                     </div>

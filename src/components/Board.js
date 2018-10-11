@@ -45,7 +45,7 @@ class Board extends React.Component {
           <col align="center" span={cols.length} />
           {cols.map(col => {
             return (
-              <td>
+              <td key={col.id}>
                 <Col id={col.id} />
               </td>
             );
