@@ -131,8 +131,8 @@ class Card extends Component {
     } else {
       card = JSON.parse(localStorage.getItem("card_" + id));
       if (
-        card.description === this.refs.description.value &&
-        card.name === this.refs.name.value
+        card.description === this.state.description &&
+        card.name === this.state.name
       )
         return;
     }
@@ -216,15 +216,20 @@ class Card extends Component {
                       />
                     </div>
                   </div>
-
-                  <button className="btn btn-primary" type="submit">
-                    Save
-                  </button>
-                  {id !== 0 && (
-                    <button className="btn btn-danger" onClick={this.delete}>
-                      Delete Card
+                  <div
+                    class="btn-group"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button className="btn btn-primary" type="submit">
+                      Save
                     </button>
-                  )}
+                    {id !== 0 && (
+                      <button className="btn btn-danger" onClick={this.delete}>
+                        Delete Card
+                      </button>
+                    )}
+                  </div>
                 </form>
               </p>
               {id !== 0 && (
@@ -263,11 +268,6 @@ class Card extends Component {
                   </form>
                 </div>
               )}
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-primary">
-                Save changes
-              </button>
             </div>
           </div>
         </div>

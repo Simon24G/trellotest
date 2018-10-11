@@ -58,9 +58,8 @@ class Comment extends React.Component {
             defaultValue={textComment}
             onChange={this.commentChange}
           />
-          <p>
+          <p class="btn-group" role="group" aria-label="Basic example">
             <button type="submit">save change</button>
-            {"      "}
             <input type="button" onClick={this.delete} value="X" />
           </p>
         </form>
