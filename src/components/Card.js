@@ -162,7 +162,7 @@ class Card extends Component {
     const { name, colName, description, comments, authorName, id } = this.state;
     const textComment = !!this.state.textComment ? this.state.textComment : "";
     return (
-      <div className="modal" tabindex="-1" role="dialog">
+      <div className="modal" tabIndex="-1" role="dialog">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -188,87 +188,84 @@ class Card extends Component {
               </button>
             </div>
             <div className="modal-body square scrollbar-cyan bordered-cyan">
-              <p>
-                <form onSubmit={this.changeContentCard}>
-                  <div className="form-row">
-                    <div className="col-md-2 mb-1">
-                      <label for="nameCurrentCard">Name</label>
-                      <input
-                        type="text"
-                        onChange={this.nameChange}
-                        className="form-control"
-                        id="nameCurrentCard"
-                        value={name}
-                        required
-                      />
-                    </div>
+              <form onSubmit={this.changeContentCard}>
+                <div className="form-row">
+                  <div className="col-md-2 mb-1">
+                    <label htmlFor="nameCurrentCard">Name</label>
+                    <input
+                      type="text"
+                      onChange={this.nameChange}
+                      className="form-control"
+                      id="nameCurrentCard"
+                      value={name}
+                      required
+                    />
                   </div>
-                  <div className="form-row">
-                    <div className="col-md-6 mb-4">
-                      <label htmlFor="descriptionCurrentCard">
-                        Description
-                      </label>
-                      <textarea
-                        onChange={this.descriptionChange}
-                        className="form-control square scrollbar-cyan bordered-cyan"
-                        id="descriptionCurrentCard"
-                        rows="6"
-                        value={description}
-                        required
-                      />
-                    </div>
+                </div>
+                <div className="form-row">
+                  <div className="col-md-6 mb-4">
+                    <label htmlFor="descriptionCurrentCard">Description</label>
+                    <textarea
+                      onChange={this.descriptionChange}
+                      className="form-control square scrollbar-cyan bordered-cyan"
+                      id="descriptionCurrentCard"
+                      rows="6"
+                      value={description}
+                      required
+                    />
                   </div>
-                  <div
-                    className="btn-group"
-                    role="group"
-                    aria-label="Basic example"
-                  >
-                    <button className="btn btn-primary" type="submit">
-                      Save
+                </div>
+                <div
+                  className="btn-group"
+                  role="group"
+                  aria-label="Basic example"
+                >
+                  <button className="btn btn-primary" type="submit">
+                    Save
+                  </button>
+                  {id !== 0 && (
+                    <button className="btn btn-danger" onClick={this.delete}>
+                      Delete Card
                     </button>
-                    {id !== 0 && (
-                      <button className="btn btn-danger" onClick={this.delete}>
-                        Delete Card
-                      </button>
-                    )}
-                  </div>
-                </form>
-              </p>
+                  )}
+                </div>
+              </form>
               {id !== 0 && (
                 <div>
-                  <p>
-                    <b>Comments:</b>
-                  </p>
-                  <p className="scrollComment square scrollbar-cyan bordered-cyan">
-                    {comments.map(comment => {
-                      return (
-                        <Comment
-                          key={comment.id}
-                          id={comment.id}
-                          removeComment={this.removeComment}
-                        />
-                      );
-                    })}
-                  </p>
+                  {comments.length > 0 && (
+                    <div>
+                      <p>
+                        <b>Comments:</b>
+                      </p>
+                      <div className="scrollComment square scrollbar-cyan bordered-cyan">
+                        {comments.map(comment => {
+                          return (
+                            <Comment
+                              key={comment.id}
+                              id={comment.id}
+                              removeComment={this.removeComment}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
                   <form onSubmit={this.addComment}>
                     <p>
                       <b>Add comment:</b>
                     </p>
-                    <p>
-                      <textarea
-                        rows="5"
-                        cols="55"
-                        onChange={this.textCommentChange}
-                        required
-                      >
-                        {textComment}
-                      </textarea>
-                    </p>
-                    <p>
-                      <button type="submit" className="btn btn-info">
-                        OK
-                      </button>
-                    </p>
+                    <textarea
+                      rows="5"
+                      cols="55"
+                      onChange={this.textCommentChange}
+                      required
+                    >
+                      {textComment}
+                    </textarea>
+                    <button type="submit" className="btn btn-info">
+                      OK
+                    </button>
                   </form>
                 </div>
               )}

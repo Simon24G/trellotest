@@ -55,7 +55,7 @@ class CardIcon extends React.Component {
             <pre className="card-text  square scrollbar-cyan bordered-cyan scrollDescriptionCardIcon">
               {this.state.description}
             </pre>
-            <p>
+            <div>
               Comments: {countComments} {"  "}
               <button
                 type="button"
@@ -64,7 +64,7 @@ class CardIcon extends React.Component {
               >
                 Open
               </button>
-            </p>
+            </div>
           </div>
         </div>
 

@@ -40,17 +40,10 @@ class Board extends React.Component {
     const { cols } = this.state;
 
     return (
-      <div>
-        <table>
-          <col align="center" span={cols.length} />
-          {cols.map(col => {
-            return (
-              <td key={col.id}>
-                <Col id={col.id} />
-              </td>
-            );
-          })}
-        </table>
+      <div className="row">
+        {cols.map(col => {
+          return <Col key={col.id} id={col.id} />;
+        })}
       </div>
     );
   }

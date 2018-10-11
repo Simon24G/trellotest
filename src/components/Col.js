@@ -72,7 +72,7 @@ class Col extends React.Component {
     const { name, cards, isOpen, isOpenCreateCard } = this.state;
 
     return (
-      <div className="Col">
+      <div className="col">
         {isOpen && isOpenCreateCard ? (
           <Card
             id="0"
@@ -90,6 +90,7 @@ class Col extends React.Component {
               {cards.map((card, index) => {
                 return (
                   <CardIcon
+                    key={card.id}
                     colName={name}
                     isOpen={
                       index + 1 === cards.length && isOpen && !isOpenCreateCard
@@ -100,7 +101,7 @@ class Col extends React.Component {
                 );
               })}
             </div>
-            <p>
+            <div>
               Вставьте новую карточку{" "}
               <button
                 type="button"
@@ -109,7 +110,7 @@ class Col extends React.Component {
               >
                 +
               </button>
-            </p>
+            </div>
           </div>
         </div>
       </div>
