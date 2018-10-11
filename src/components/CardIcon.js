@@ -1,9 +1,6 @@
 import React from "react";
 import Card from "./Card.js";
 
-//ready to check and check phase render
-//realise open()
-//Realise array in HashMap with key id
 class CardIcon extends React.Component {
   constructor(props) {
     super(props);
@@ -81,16 +78,6 @@ class CardIcon extends React.Component {
       </div>
     );
   }
-  //button
 }
 
 export default CardIcon;
-
-/*
-<p white-space="pre">{this.state.description}</p>
-
-<textarea rows="5" cols="30" ref="description" white-space="pre-wrap">
-            {this.state.description}
-          </textarea>
-
-*/

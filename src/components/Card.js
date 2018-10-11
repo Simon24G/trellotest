@@ -1,23 +1,20 @@
 import React, { Component } from "react";
 import Comment from "./Comment.js";
 
-//ready to check and check phase render
-//Realise array in HashMap with key id
-//  this.card - is it nesseary?(optimization)
 class Card extends Component {
   constructor(props) {
     super(props);
     this.author = JSON.parse(localStorage.getItem("author"));
     if (+props.id > 0) {
-      this.card = JSON.parse(localStorage.getItem("card_" + props.id));
+      let card = JSON.parse(localStorage.getItem("card_" + props.id));
       const author = JSON.parse(
-        localStorage.getItem("author_" + this.card.authorId)
+        localStorage.getItem("author_" + card.authorId)
       );
-      let comments = this.card.comments;
+      let comments = card.comments;
       this.state = {
         id: props.id,
-        name: this.card.name,
-        description: this.card.description,
+        name: card.name,
+        description: card.description,
         colName: props.colName,
         authorName: author.name,
         comments: comments
@@ -25,6 +22,7 @@ class Card extends Component {
     } else {
       const author = JSON.parse(localStorage.getItem("author"));
       this.state = {
+        card: {},
         id: 0,
         name: "",
         description: "",
@@ -56,17 +54,17 @@ class Card extends Component {
     if (this.state.id && nextProps.id === this.state.id) {
       state = {};
     } else {
-      this.card = JSON.stringify(localStorage.getItem("card_" + nextProps.id));
+      let card = JSON.stringify(localStorage.getItem("card_" + nextProps.id));
       const author = JSON.parse(
-        localStorage.getItem("author_" + this.card.authorId)
+        localStorage.getItem("author_" + card.authorId)
       );
 
-      let comments = this.card.comments;
+      let comments = card.comments;
       if (!!comments) comments = []; /// is == null || length==0
       state = {
         id: nextProps.id,
-        name: this.card.name,
-        description: this.card.description,
+        name: card.name,
+        description: card.description,
         author: author.name,
         comments: comments
       };
@@ -82,22 +80,20 @@ class Card extends Component {
 
   addComment = event => {
     event.preventDefault();
-    let commentText = this.refs.text.value; //elem.value;
-    if (commentText === "") return;
 
     const nextId = 1 + +localStorage.getItem("last_id");
     localStorage.setItem("last_id", nextId);
     const comment = {
       id: nextId,
-      text: commentText,
-      cardId: this.card.id,
+      text: this.state.textComment,
+      cardId: this.state.id,
       authorId: this.author.id
     };
     localStorage.setItem("comment_" + nextId, JSON.stringify(comment));
 
-    let card = JSON.parse(localStorage.getItem("card_" + this.card.id));
+    let card = JSON.parse(localStorage.getItem("card_" + this.state.id));
     card.comments.push({ id: nextId });
-    localStorage.setItem("card_" + this.card.id, JSON.stringify(card));
+    localStorage.setItem("card_" + this.state.id, JSON.stringify(card));
     let comments = this.state.comments;
     //проверка добавления карточек
     comments.push(comment);
@@ -108,10 +104,11 @@ class Card extends Component {
   removeComment = elem => {
     localStorage.removeItem("comment_" + elem.id);
 
-    this.card.comments = this.card.comments.filter(e => e.id !== elem.id);
-    localStorage.setItem("card_" + this.card.id, JSON.stringify(this.card));
+    let card = JSON.parse(localStorage.getItem("card_" + this.state.id));
+    card.comments = card.comments.filter(e => e.id !== elem.id);
+    localStorage.setItem("card_" + this.state.id, JSON.stringify(card));
 
-    this.setState({ comments: this.card.comments });
+    this.setState({ comments: card.comments });
     this.props.update();
   };
 
@@ -139,92 +136,141 @@ class Card extends Component {
       )
         return;
     }
-    card.description = this.refs.description.value; //elem.value;
-    card.name = this.refs.name.value; //elem.value;
+    card.description = this.state.description;
+    card.name = this.state.name;
     localStorage.setItem("card_" + id, JSON.stringify(card));
     if (flag) {
       this.props.eventCreateCard(id);
     } else {
       this.props.update();
     }
-    this.setState({ description: card.description, name: card.name });
   };
 
+  descriptionChange = e => {
+    let text = e.target.value;
+    this.setState({ description: text });
+  };
+  nameChange = e => {
+    let text = e.target.value;
+    this.setState({ name: text });
+  };
+  textCommentChange = e => {
+    let text = e.target.value;
+    this.setState({ textComment: text });
+  };
   render() {
     const { name, colName, description, comments, authorName, id } = this.state;
+    const textComment = !!this.state.textComment ? this.state.textComment : "";
     return (
-      <div className="PopupCard">
-        <p>
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">Card name: {name}</li>
-              <li class="breadcrumb-item"> Col name: {colName} </li>
-              <li class="breadcrumb-item active" aria-current="page">
-                Author Card name: {authorName}{" "}
-              </li>
-            </ol>
-          </nav>
+      <div className="modal" tabindex="-1" role="dialog">
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Card name: {name}</li>
+                    <li class="breadcrumb-item"> Col name: {colName} </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                      Author Card name: {authorName}{" "}
+                    </li>
+                  </ol>
+                </nav>
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+                onClick={this.close}
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <p>
+                <form onSubmit={this.changeContentCard}>
+                  <div className="form-row">
+                    <div className="col-md-2 mb-1">
+                      <label for="nameCurrentCard">Name</label>
+                      <input
+                        type="text"
+                        onChange={this.nameChange}
+                        className="form-control"
+                        id="nameCurrentCard"
+                        defaultValue={name}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div className="col-md-6 mb-4">
+                      <label for="descriptionCurrentCard">Description</label>
+                      <textarea
+                        onChange={this.descriptionChange}
+                        class="form-control"
+                        id="descriptionCurrentCard"
+                        rows="6"
+                        defaultValue={description}
+                        required
+                      />
+                    </div>
+                  </div>
 
-          <button type="button" onClick={this.close}>
-            Close
-          </button>
-          <form onSubmit={this.changeContentCard}>
-            <div className="form-row">
-              <div className="col-md-2 mb-1">
-                <label for="nameCurrentCard">Name</label>
-                <input
-                  type="text"
-                  ref="name"
-                  className="form-control"
-                  id="nameCurrentCard"
-                  defaultValue={name}
-                  required
-                />
-              </div>
+                  <button className="btn btn-primary" type="submit">
+                    Save
+                  </button>
+                  {id !== 0 && (
+                    <button className="btn btn-danger" onClick={this.delete}>
+                      Delete Card
+                    </button>
+                  )}
+                </form>
+              </p>
+              {id !== 0 && (
+                <div>
+                  <p>
+                    <b>Comments:</b>
+                  </p>
+                  <p className="scrollComment">
+                    {comments.map(comment => {
+                      return (
+                        <Comment
+                          key={comment.id}
+                          id={comment.id}
+                          removeComment={this.removeComment}
+                        />
+                      );
+                    })}
+                  </p>
+                  <form onSubmit={this.addComment}>
+                    <p>
+                      <b>Add comment:</b>
+                    </p>
+                    <p>
+                      <textarea
+                        rows="5"
+                        cols="55"
+                        onChange={this.textCommentChange}
+                        required
+                      >
+                        {textComment}
+                      </textarea>
+                    </p>
+                    <p>
+                      <input type="submit" value="ok" />
+                    </p>
+                  </form>
+                </div>
+              )}
             </div>
-            <div className="form-row">
-              <div className="col-md-6 mb-4">
-                <label for="descriptionCurrentCard">Description</label>
-                <textarea
-                  ref="description"
-                  class="form-control"
-                  id="descriptionCurrentCard"
-                  rows="6"
-                  defaultValue={description}
-                  required
-                />
-              </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-primary">
+                Save changes
+              </button>
             </div>
-            <button className="btn btn-primary" type="submit">
-              Save
-            </button>
-          </form>
-        </p>
-        {id !== 0 ? (
-          <div>
-            <input type="button" onClick={this.delete} value="Delete Card" />
-            <p>
-              {comments.map(comment => {
-                return (
-                  <Comment id={comment.id} removeComment={this.removeComment} />
-                );
-              })}
-            </p>
-            <form onSubmit={this.addComment}>
-              <p>
-                <b>Add comment:</b>
-              </p>
-              <p>
-                <textarea rows="5" cols="45" name="text" ref="text" />
-              </p>
-              <p>
-                <input type="submit" value="ok" />
-              </p>
-            </form>
           </div>
-        ) : (
-          ""
-        )}
+        </div>
       </div>
     );
   }

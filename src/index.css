@@ -14,3 +14,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.scrollComment {
+  overflow: scroll;
+  height: 200px;
+}
+
+.modal {
+  display: block;
+  color: black;
+}
+.modal-body {
+  overflow: scroll;
+  height: 350px;
+}
