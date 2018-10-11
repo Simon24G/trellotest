@@ -187,7 +187,7 @@ class Card extends Component {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body  square scrollbar-cyan bordered-cyan">
               <p>
                 <form onSubmit={this.changeContentCard}>
                   <div className="form-row">
@@ -237,7 +237,7 @@ class Card extends Component {
                   <p>
                     <b>Comments:</b>
                   </p>
-                  <p className="scrollComment">
+                  <p className="scrollComment square scrollbar-cyan bordered-cyan">
                     {comments.map(comment => {
                       return (
                         <Comment

@@ -52,7 +52,9 @@ class CardIcon extends React.Component {
           <div className="card-header">Name card: {this.state.name}</div>
           <div className="card-body">
             <h5 className="card-title">Description:</h5>
-            <pre className="card-text">{this.state.description}</pre>
+            <pre className="card-text  square scrollbar-cyan bordered-cyan scrollDescriptionCardIcon">
+              {this.state.description}
+            </pre>
             <p>
               Comments: {countComments} {"  "}
               <button
