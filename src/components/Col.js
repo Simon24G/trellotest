@@ -2,35 +2,32 @@ import React from "react";
 import CardIcon from "./CardIcon.js";
 import Card from "./Card.js";
 
-//ready to check and check phase render
 class Col extends React.Component {
   constructor(props) {
     super(props);
-    this.author = JSON.parse(localStorage.getItem("author"));
     this.state = this.getNewPeaceState(props);
   }
   componentWillReceiveProps(nextProps) {
-    if (this.id && nextProps.id === this.id) return;
+    if (this.state.id && nextProps.id === this.state.id) return;
     this.setState(this.getNewPeaceState(nextProps));
   }
   getNewPeaceState(nextProps) {
-    this.id = nextProps.id;
-    let col = JSON.parse(localStorage.getItem("col_" + this.id));
-    //JSON.parse(localStorage.getItem("col_" + this.id));
-    this.cards = col.cards;
+    let col = JSON.parse(localStorage.getItem("col_" + nextProps.id));
     return {
-      cards: this.cards,
+      author: JSON.parse(localStorage.getItem("author")),
+      id: nextProps.id,
+      cards: col.cards,
       name: col.name,
       isOpen: false
     };
   }
 
   delete = id => {
-    let col = JSON.parse(localStorage.getItem("col_" + this.id));
+    let col = JSON.parse(localStorage.getItem("col_" + this.state.id));
     for (let index = 0; index < col.cards.length; index++) {
       if (col.cards[index].id === id) {
         col.cards.splice(index, 1);
-        localStorage.setItem("col_" + this.id, JSON.stringify(col));
+        localStorage.setItem("col_" + this.state.id, JSON.stringify(col));
         break;
       }
     }
@@ -39,9 +36,9 @@ class Col extends React.Component {
     });
   };
   changeNameCol = elem => {
-    let col = JSON.parse(localStorage.getItem("col_" + this.id));
+    let col = JSON.parse(localStorage.getItem("col_" + this.state.id));
     col.name = elem.value;
-    localStorage.setItem("col_" + this.id, JSON.stringify(col));
+    localStorage.setItem("col_" + this.state.id, JSON.stringify(col));
     this.setState({ name: col.name });
   };
   add = () => {
@@ -54,9 +51,9 @@ class Col extends React.Component {
     let card = JSON.parse(localStorage.getItem("card_" + id));
     card.id = id;
     localStorage.setItem("card_" + id, JSON.stringify(card));
-    let col = JSON.parse(localStorage.getItem("col_" + this.id));
+    let col = JSON.parse(localStorage.getItem("col_" + this.state.id));
     col.cards.push({ id: id });
-    localStorage.setItem("col_" + this.id, JSON.stringify(col));
+    localStorage.setItem("col_" + this.state.id, JSON.stringify(col));
 
     this.setState({
       cards: col.cards,

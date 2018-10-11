@@ -1,43 +1,39 @@
 import React from "react";
 import Col from "./Col.js";
 
-//ready to check and check phase render
 class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getNewPeaceState(props);
   }
   componentWillReceiveProps(nextProps) {
-    if (this.id && nextProps.id === this.id) return;
+    if (this.state.id && nextProps.id === this.state.id) return;
     this.setState(this.getNewPeaceState(nextProps));
   }
   getNewPeaceState(nextProps) {
-    this.id = nextProps.id;
-    this.board = JSON.parse(localStorage.getItem("board_" + this.id));
-    //this.board = JSON.parse(localStorage.getItem("board_" + this.id));
-    if (this.board == null) {
-      //this.board.cols.length === 0) {
-      this.board = {};
-      this.board.cols = [
+    let board = JSON.parse(localStorage.getItem("board_" + nextProps.id));
+    if (board == null) {
+      board = {};
+      board.cols = [
         { name: "TODO" },
         { name: "In Progress" },
         { name: "Testing" },
         { name: "Done" }
       ];
       let id = localStorage.getItem("last_id");
-      this.board.id = id;
-      this.board.cols.forEach(col => {
+      board.id = id;
+      board.cols.forEach(col => {
         id++;
         col.id = id;
         col.cards = [];
-        col.BoardId = this.id;
+        col.BoardId = nextProps.id;
         localStorage.setItem("col_" + id, JSON.stringify(col));
       });
       localStorage.setItem("last_id", id);
-      localStorage.setItem("board_" + this.id, JSON.stringify(this.board));
-      localStorage.setItem("board", JSON.stringify(this.board));
+      localStorage.setItem("board_" + nextProps.id, JSON.stringify(board));
+      localStorage.setItem("board", JSON.stringify(board));
     }
-    return { cols: this.board.cols };
+    return { cols: board.cols };
   }
 
   render() {

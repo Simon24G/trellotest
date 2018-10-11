@@ -2,32 +2,28 @@ import React from "react";
 import Board from "./components/Board.js";
 import PopupAnswer from "./components/PopupAnswer.js";
 
-//const AuthorContext = React.createContext();
-
 class App extends React.Component {
   constructor(props) {
     super(props);
     let author = JSON.parse(localStorage.getItem("author"));
     let state = {};
     if (author !== null) {
-      this.author = author;
       state.answerName = false;
       state.boardId = 1;
       state.authorName = author.name;
     } else {
       state.answerName = true;
     }
-    this.board = JSON.parse(localStorage.getItem("board"));
-    if (this.board === null) {
-      this.board = { id: 1, name: "begin" };
-      localStorage.setItem("board", JSON.stringify(this.board));
-      state.boardId = this.board;
+    let board = JSON.parse(localStorage.getItem("board"));
+    if (board === null) {
+      board = { id: 1, name: "begin" };
+      localStorage.setItem("board", JSON.stringify(state.board));
+      state.boardId = board;
     }
 
     this.state = state;
   }
   saveAuthor(author) {
-    this.author = author;
     this.setState({
       answerName: false,
       boardId: 1,
@@ -74,7 +70,6 @@ class App extends React.Component {
         <Board id={boardId} />
       </div>
     );
-    //alert(answerName);
     return (
       <div>
         <nav class="navbar fixed-top navbar-dark bg-primary">
@@ -99,12 +94,3 @@ class App extends React.Component {
 }
 
 export default App;
-/*
-        
-
-
-
-
-
-const placeWeWantToPutComponent = document.getElementById("root");
-ReactDOM.render(<App />, placeWeWantToPutComponent);*/
