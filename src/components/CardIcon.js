@@ -52,20 +52,11 @@ class CardIcon extends React.Component {
           <div className="card-header">Name card: {this.state.name}</div>
           <div className="card-body">
             <h5 className="card-title">Description:</h5>
-            <pre className="card-text  square scrollbar-cyan bordered-cyan scrollDescriptionCardIcon">
+            <pre className="card-text square scrollbar-cyan bordered-cyan scrollDescriptionCardIcon">
               {this.state.description}
             </pre>
-            <div>
-              Comments: {countComments} {"  "}
-              <button
-                type="button"
-                className="btn btn-info"
-                onClick={this.open}
-              >
-                Open
-              </button>
-            </div>
           </div>
+          <div class="card-footer">Comments: {countComments}</div>
         </div>
 
         {isOpenCard && (

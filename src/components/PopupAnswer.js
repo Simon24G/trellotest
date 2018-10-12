@@ -8,7 +8,7 @@ class PopupAnswer extends React.Component {
       if (this.state.name === "") return;
       props.saveName(this.state.name);
     };
-    this.state = { name: "", isOpen: false, mv: "12d" };
+    this.state = { name: "", isOpen: false };
   }
   popup = () => {
     this.setState({ isOpen: true });

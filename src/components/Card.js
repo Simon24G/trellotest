@@ -210,6 +210,7 @@ class Card extends Component {
                       className="form-control square scrollbar-cyan bordered-cyan"
                       id="descriptionCurrentCard"
                       rows="6"
+                      cols="55"
                       value={description}
                       required
                     />
@@ -252,7 +253,7 @@ class Card extends Component {
                       <p>
                         <b>Comments:</b>
                       </p>
-                      <div className="scrollComment square scrollbar-cyan bordered-cyan">
+                      <div>
                         {comments.map(comment => {
                           return (
                             <Comment

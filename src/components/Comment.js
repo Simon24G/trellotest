@@ -40,36 +40,57 @@ class Comment extends React.Component {
     );
     this.setState(prevState => {
       return {
+        regim: false,
         textComment: prevState.comment.text,
         comment: prevState.comment
       };
     });
   };
+  edit = () => {
+    this.setState({
+      regim: true
+    });
+  };
   render() {
-    const { authorName, textComment } = this.state;
+    const { authorName, textComment, regim } = this.state;
+    //const regim = { action: this.action };
     return (
       <div>
         <p>Author: {authorName}</p>
-        <form onSubmit={this.updateComment}>
-          <textarea
-            rows="5"
-            cols="55"
-            value={textComment}
-            onChange={this.commentChange}
-          />
-          <p className="btn-group" role="group" aria-label="Basic example">
-            <button className="btn btn-primary" type="submit">
-              save change
-            </button>
-            <button
-              type="button"
-              className="btn btn-danger"
-              onClick={this.delete}
-            >
-              X
-            </button>
-          </p>
-        </form>
+        {regim ? (
+          <form onSubmit={this.updateComment}>
+            <textarea
+              rows="5"
+              cols="55"
+              value={textComment}
+              onChange={this.commentChange}
+            />
+            <div className="btn-group" role="group" aria-label="Basic example">
+              <button className="btn btn-primary" type="submit">
+                save change
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={this.delete}
+              >
+                X
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div>
+            <pre className="comment">{textComment}</pre>
+            <div className="btn-group" role="group" aria-label="Basic example">
+              <button className="btn btn-primary" onClick={this.edit}>
+                edit
+              </button>
+              <button className="btn btn-danger" onClick={this.delete}>
+                X
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

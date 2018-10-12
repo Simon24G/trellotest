@@ -5,13 +5,13 @@ import Card from "./Card.js";
 class Col extends React.Component {
   constructor(props) {
     super(props);
-    this.state = this.getNewPeaceState(props);
+    this.state = Col.getNewPeaceState(props);
   }
   componentWillReceiveProps(nextProps) {
     if (this.state.id && nextProps.id === this.state.id) return;
-    this.setState(this.getNewPeaceState(nextProps));
+    this.setState(Col.getNewPeaceState(nextProps));
   }
-  getNewPeaceState(nextProps) {
+  static getNewPeaceState(nextProps) {
     let col = JSON.parse(localStorage.getItem("col_" + nextProps.id));
     return {
       author: JSON.parse(localStorage.getItem("author")),
