@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Comment from "./Comment.js";
 
 class Card extends Component {
@@ -32,8 +33,6 @@ class Card extends Component {
       };
     }
   }
-  //aler
-  // or to add argument key === 1 || 2 : 1 - set, 2 - =
   close = () => {
     if (this.state.name === "" && this.state.id !== 0) this.props.delete();
     this.props.close();
@@ -42,40 +41,25 @@ class Card extends Component {
     this.props.delete();
     this.props.close();
   };
-
   componentWillReceiveProps(nextProps) {
-    let newState = this.getNewPeaceState(nextProps);
-    if (newState !== 0) this.setState(newState);
-  }
-
-  getNewPeaceState(nextProps) {
-    let state;
-    let countState = 0;
-    if (this.state.id && nextProps.id === this.state.id) {
-      state = {};
-    } else {
+    if (!(this.state.id && nextProps.id === this.state.id)) {
       let card = JSON.stringify(localStorage.getItem("card_" + nextProps.id));
       const author = JSON.parse(
         localStorage.getItem("author_" + card.authorId)
       );
-
       let comments = card.comments;
-      if (!!comments) comments = []; /// is == null || length==0
-      state = {
+      if (!!comments) comments = [];
+      this.setState({
         id: nextProps.id,
         name: card.name,
         description: card.description,
         author: author.name,
         comments: comments
-      };
-      countState = 3;
+      });
     }
     if (!(this.state.colName && nextProps.colName === this.state.colName)) {
-      state.colName = nextProps.colName;
-      countState++;
+      this.setState({ colName: nextProps.colName });
     }
-
-    return countState === 0 ? 0 : state; // i don't found is_empty_object
   }
 
   addComment = event => {
@@ -275,5 +259,14 @@ class Card extends Component {
     );
   }
 }
+
+Card.propTypes = {
+  id: PropTypes.number.isRequired,
+  colName: PropTypes.string.isRequired,
+  close: PropTypes.func.isRequired,
+  delete: PropTypes.func.isRequired,
+  eventCreateCard: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired
+};
 
 export default Card;

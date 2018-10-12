@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import CardIcon from "./CardIcon.js";
 import Card from "./Card.js";
 
-class Col extends React.Component {
+class Col extends Component {
   constructor(props) {
     super(props);
     this.state = Col.getNewPeaceState(props);
@@ -117,5 +118,9 @@ class Col extends React.Component {
     );
   }
 }
+
+Col.propTypes = {
+  id: PropTypes.number.isRequired
+};
 
 export default Col;

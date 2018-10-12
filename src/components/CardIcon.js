@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Card from "./Card.js";
 
-class CardIcon extends React.Component {
+class CardIcon extends Component {
   constructor(props) {
     super(props);
     const card = JSON.parse(localStorage.getItem("card_" + props.id));
@@ -72,5 +73,12 @@ class CardIcon extends React.Component {
     );
   }
 }
+
+CardIcon.propTypes = {
+  isOpen: PropTypes.bool,
+  id: PropTypes.number.isRequired,
+  colName: PropTypes.string.isRequired,
+  delete: PropTypes.func.isRequired
+};
 
 export default CardIcon;

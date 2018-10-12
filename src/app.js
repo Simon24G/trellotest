@@ -1,8 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import Board from "./components/Board.js";
 import PopupAnswer from "./components/PopupAnswer.js";
 
-class App extends React.Component {
+class App extends Component {
   constructor(props) {
     super(props);
     let author = JSON.parse(localStorage.getItem("author"));

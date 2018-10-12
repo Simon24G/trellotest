@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Col from "./Col.js";
 
-class Board extends React.Component {
+class Board extends Component {
   constructor(props) {
     super(props);
     this.state = this.getNewPeaceState(props);
@@ -48,5 +49,9 @@ class Board extends React.Component {
     );
   }
 }
+
+Board.propTypes = {
+  id: PropTypes.number.isRequired
+};
 
 export default Board;

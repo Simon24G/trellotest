@@ -1,6 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-class PopupAnswer extends React.Component {
+class PopupAnswer extends Component {
   constructor(props) {
     super(props);
     this.saveName = event => {
@@ -28,5 +29,8 @@ class PopupAnswer extends React.Component {
     );
   }
 }
+Comment.propTypes = {
+  saveName: PropTypes.func.isRequired
+};
 
 export default PopupAnswer;

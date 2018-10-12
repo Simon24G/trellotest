@@ -1,6 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-class Comment extends React.Component {
+class Comment extends Component {
   constructor(props) {
     super(props);
     this.state = this.getNewPeaceState(props);
@@ -95,5 +96,10 @@ class Comment extends React.Component {
     );
   }
 }
+
+Comment.propTypes = {
+  removeComment: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired
+};
 
 export default Comment;
