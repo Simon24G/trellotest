@@ -12,7 +12,7 @@ class Board extends React.Component {
   }
   getNewPeaceState(nextProps) {
     let board = JSON.parse(localStorage.getItem("board_" + nextProps.id));
-    if (board == null) {
+    if (board === null) {
       board = {};
       board.cols = [
         { name: "TODO" },

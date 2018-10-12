@@ -47,8 +47,8 @@ class CardIcon extends React.Component {
   render() {
     const { isOpenCard, countComments, id, colName } = this.state;
     return (
-      <div className="CardIcon">
-        <div className="card text-white bg-success mb-3">
+      <div>
+        <div onClick={this.open} className="card text-white bg-success mb-3">
           <div className="card-header">Name card: {this.state.name}</div>
           <div className="card-body">
             <h5 className="card-title">Description:</h5>

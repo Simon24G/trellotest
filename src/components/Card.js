@@ -97,7 +97,7 @@ class Card extends Component {
     let comments = this.state.comments;
     //проверка добавления карточек
     comments.push(comment);
-    this.setState({ comments: comments });
+    this.setState({ comments: comments, textComment: "" });
     this.props.update();
     //Stores.commentStore.add(comment) with generated id???
   };
@@ -232,6 +232,21 @@ class Card extends Component {
               </form>
               {id !== 0 && (
                 <div>
+                  <form onSubmit={this.addComment}>
+                    <p>
+                      <b>Add comment:</b>
+                    </p>
+                    <textarea
+                      rows="5"
+                      cols="55"
+                      onChange={this.textCommentChange}
+                      value={textComment}
+                      required
+                    />
+                    <button type="submit" className="btn btn-info">
+                      OK
+                    </button>
+                  </form>
                   {comments.length > 0 && (
                     <div>
                       <p>
@@ -250,23 +265,6 @@ class Card extends Component {
                       </div>
                     </div>
                   )}
-
-                  <form onSubmit={this.addComment}>
-                    <p>
-                      <b>Add comment:</b>
-                    </p>
-                    <textarea
-                      rows="5"
-                      cols="55"
-                      onChange={this.textCommentChange}
-                      required
-                    >
-                      {textComment}
-                    </textarea>
-                    <button type="submit" className="btn btn-info">
-                      OK
-                    </button>
-                  </form>
                 </div>
               )}
             </div>
