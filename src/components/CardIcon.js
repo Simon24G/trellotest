@@ -57,7 +57,7 @@ class CardIcon extends Component {
               {this.state.description}
             </pre>
           </div>
-          <div class="card-footer">Comments: {countComments}</div>
+          <div className="card-footer">Comments: {countComments}</div>
         </div>
 
         {isOpenCard && (

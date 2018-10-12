@@ -6,7 +6,10 @@ import Card from "./Card.js";
 class Col extends Component {
   constructor(props) {
     super(props);
-    this.state = Col.getNewPeaceState(props);
+    let state = Col.getNewPeaceState(props);
+    state.isEditName = false;
+    state.isOpen = false;
+    this.state = state;
   }
   componentWillReceiveProps(nextProps) {
     if (this.state.id && nextProps.id === this.state.id) return;
@@ -18,8 +21,7 @@ class Col extends Component {
       author: JSON.parse(localStorage.getItem("author")),
       id: nextProps.id,
       cards: col.cards,
-      name: col.name,
-      isOpen: false
+      name: col.name
     };
   }
 
@@ -68,24 +70,89 @@ class Col extends Component {
       isOpen: false
     });
   };
+  editName = () => {
+    this.setState(ps => {
+      return {
+        isEditName: true,
+        nameCol: ps.name
+      };
+    });
+  };
+  nameChange = e => {
+    this.setState({
+      nameCol: e.target.value
+    });
+  };
+  saveName = () => {
+    let col = JSON.parse(localStorage.getItem("col_" + this.state.id));
+    col.name = this.state.nameCol;
+    localStorage.setItem("col_" + this.state.id, JSON.stringify(col));
 
+    this.setState(ps => {
+      return {
+        name: ps.nameCol,
+        isEditName: false
+      };
+    });
+  };
+  closeEditName = () => {
+    this.setState({
+      isEditName: false
+    });
+  };
   render() {
-    const { name, cards, isOpen, isOpenCreateCard } = this.state;
+    const {
+      name,
+      nameCol,
+      cards,
+      isOpen,
+      isOpenCreateCard,
+      isEditName
+    } = this.state;
 
     return (
       <div className="col">
-        {isOpen && isOpenCreateCard ? (
-          <Card
-            id="0"
-            colName={name}
-            close={this.close}
-            eventCreateCard={this.eventCreateCard}
-          />
-        ) : (
-          ""
-        )}
+        {isOpen &&
+          isOpenCreateCard && (
+            <Card
+              id="0"
+              colName={name}
+              close={this.close}
+              eventCreateCard={this.eventCreateCard}
+            />
+          )}
         <div className="card text-white bg-primary mb-3">
-          <div className="card-header">Name Col: {name}</div>
+          <div className="card-header">
+            Name Col:{" "}
+            {isEditName ? (
+              <form onSubmit={this.saveName}>
+                <input
+                  type="text"
+                  onChange={this.nameChange}
+                  className="form-control"
+                  value={nameCol}
+                  required
+                />
+                <button className="btn btn-success" type="submit">
+                  Save
+                </button>{" "}
+                <button
+                  className="btn btn-success"
+                  onClick={this.closeEditName}
+                >
+                  Close
+                </button>
+              </form>
+            ) : (
+              <div>
+                {" "}
+                {name}{" "}
+                <button className="btn btn-success" onClick={this.editName}>
+                  Edit
+                </button>
+              </div>
+            )}
+          </div>
           <div className="card-body">
             <div>
               {cards.map((card, index) => {

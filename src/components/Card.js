@@ -264,9 +264,9 @@ Card.propTypes = {
   id: PropTypes.number.isRequired,
   colName: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
-  delete: PropTypes.func.isRequired,
-  eventCreateCard: PropTypes.func.isRequired,
-  update: PropTypes.func.isRequired
+  delete: PropTypes.func,
+  eventCreateCard: PropTypes.func,
+  update: PropTypes.func
 };
 
 export default Card;

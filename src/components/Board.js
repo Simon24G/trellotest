@@ -15,21 +15,25 @@ class Board extends Component {
     let board = JSON.parse(localStorage.getItem("board_" + nextProps.id));
     if (board === null) {
       board = {};
-      board.cols = [
+
+      let id = +localStorage.getItem("last_id");
+      board.id = id;
+      let cols = [
         { name: "TODO" },
         { name: "In Progress" },
         { name: "Testing" },
         { name: "Done" }
       ];
-      let id = localStorage.getItem("last_id");
-      board.id = id;
-      board.cols.forEach(col => {
+      board.cols = [];
+      cols.forEach(col => {
         id++;
         col.id = id;
         col.cards = [];
         col.BoardId = nextProps.id;
-        localStorage.setItem("col_" + id, JSON.stringify(col));
+        board.cols.push({ id: col.id });
+        localStorage.setItem("col_" + col.id, JSON.stringify(col));
       });
+
       localStorage.setItem("last_id", id);
       localStorage.setItem("board_" + nextProps.id, JSON.stringify(board));
       localStorage.setItem("board", JSON.stringify(board));

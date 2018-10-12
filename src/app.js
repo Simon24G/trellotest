@@ -14,11 +14,15 @@ class App extends Component {
     } else {
       state.answerName = true;
     }
-    let board = JSON.parse(localStorage.getItem("board"));
-    if (board === null) {
+
+    let boardJSON = localStorage.getItem("board");
+    let board;
+    if (boardJSON == null || typeof undefined === "undefined") {
       board = { id: 1, name: "begin" };
       localStorage.setItem("board", JSON.stringify(state.board));
       state.boardId = board;
+    } else {
+      board = JSON.parse(boardJSON);
     }
 
     this.state = state;
@@ -31,7 +35,7 @@ class App extends Component {
     });
   }
   saveName = authorName => {
-    let nextId = localStorage.getItem("last_id") + 1;
+    let nextId = +localStorage.getItem("last_id") + 1;
     localStorage.setItem("last_id", nextId);
     let author = { name: authorName, id: nextId, comments: [], cards: [] };
 
