@@ -1,8 +1,6 @@
 import * as types from "/action-types.js";
 
-export function addCard(name, description, colId) {
-  let id = 1 + +localStorage.getItem("last_id");
-  localStorage.setItem("last_id", id);
+export function addCard(id, name, description, colId) {
   return { type: types.ADD_CARD, id, name, description, colId };
 }
 

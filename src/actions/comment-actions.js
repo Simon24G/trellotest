@@ -1,8 +1,6 @@
 import * as types from "/action-types.js";
 
-export function addComment(text, authorName, cardId) {
-  let id = 1 + +localStorage.getItem("last_id");
-  localStorage.setItem("last_id", id);
+export function addComment(id, text, authorName, cardId) {
   return { type: types.ADD_COMMENT, id, text, authorName, cardId };
 }
 
