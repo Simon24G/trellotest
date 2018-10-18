@@ -6,6 +6,7 @@ import CommentContainer from "./comment-container.js";
 
 import { addCard, changeCard, deleteCard } from "../../api/card-api.js";
 import { connect } from "react-redux";
+import { closeCard } from "../../api/user-api.js";
 
 class CardContainer extends Component {
   constructor(props) {
@@ -84,6 +85,7 @@ const mapStateToProps = store => {
   if (id === 0) {
     card = { id, colId };
   } else {
+    if (!store.boardState.cards.has("" + id)) closeCard();
     card = store.boardState.cards.get("" + id);
   }
 

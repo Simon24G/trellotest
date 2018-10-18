@@ -22,7 +22,17 @@ const mapStateToProps = store => {
 };
 
 Board.propTypes = {
-  id: PropTypes.number.isRequired
+  cols: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      cards: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired
+        }).isRequired
+      ).isRequired
+    })
+  ).isRequired
 };
 
 export default connect(mapStateToProps)(Board);
