@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { openCard } from "../api/user-api.js";
+import { connect } from "react-redux";
 
 function CardIcon(props) {
   const { card } = props;
@@ -27,16 +28,25 @@ function CardIcon(props) {
   );
 }
 
+const mapStateToProps = (store, ownProps) => {
+  return {
+    card: store.cardState.get("" + ownProps.id)
+  };
+};
+
 CardIcon.propTypes = {
+  id: PropTypes.number.isRequired,
   card: PropTypes.shape({
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     comments: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired
       })
-    ).isRequired
+    ).isRequired,
+    colId: PropTypes.number.isRequired
   }).isRequired
 };
 
-export default CardIcon;
+export default connect(mapStateToProps)(CardIcon);
