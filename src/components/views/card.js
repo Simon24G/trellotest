@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { closeCard } from "../../api/user-api.js";
 
 class Card extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class Card extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    //отделить current от reality
     this.setState({
       name: nextProps.card.name,
       description: nextProps.card.description
@@ -39,7 +41,7 @@ class Card extends Component {
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
-                onClick={this.props.close}
+                onClick={closeCard}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -110,9 +112,6 @@ Card.propTypes = {
     colId: PropTypes.number.isRequired
   }).isRequired,
 
-  isCreatePhase: PropTypes.bool.isRequired,
-
-  close: PropTypes.func.isRequired,
   saveCard: PropTypes.func.isRequired
 };
 

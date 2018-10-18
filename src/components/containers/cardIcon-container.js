@@ -1,37 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import CardContainer from "./card-container.js";
 import CardIcon from "../veiws/cardIcon.js";
-
 import { connect } from "react-redux";
 
 class CardIconContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpenCard: false
-    }; //перенести в configState в store
-  }
-  open = () => {
-    this.setState({
-      isOpenCard: true
-    });
-  };
-  close = () => {
-    this.setState({
-      isOpenCard: false
-    });
-  };
-
   render() {
-    const { isOpenCard } = this.state;
-    return (
-      <CardIcon card={this.props.card} open={this.open}>
-        {isOpenCard && (
-          <CardContainer card={this.props.card} close={this.close} />
-        )}
-      </CardIcon>
-    );
+    return <CardIcon card={this.props.card} />;
   }
 }
 

@@ -5,8 +5,17 @@ import { changeComment, deleteComment } from "../../api/comment-api";
 class Comment extends Component {
   constructor(props) {
     super(props);
-    this.state = { textComment: this.props.comment.text };
+    this.state = { textComment: this.props.comment.text, id: this.comment.id };
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.state.comment.id === nextProps.comment.id) return;
+    //смещать id редактируемого коммента
+    this.setState({
+      textComment: nextProps.comment.text,
+      regim: false
+    });
+  }
+
   updateComment = e => {
     e.preventDefault();
     const { id, cardId } = this.props.comment;
@@ -29,6 +38,7 @@ class Comment extends Component {
       regim: true
     });
   };
+  //problem при удалении комментариев во время редактирования может сместиться id редактируемого
   render() {
     const { textComment, regim } = this.state;
     return (

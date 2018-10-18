@@ -11,8 +11,7 @@ function initCols() {
 
 const initialState = {
   id: 1,
-  cols: initCols(),
-  author: null
+  cols: initCols()
 };
 
 const boardReducer = (state = initialState, action) => {
@@ -41,12 +40,6 @@ const boardReducer = (state = initialState, action) => {
     //base
     case types.CLEAR: {
       return initialState;
-    }
-    case types.LOG_IN: {
-      return { ...state, author: { name: action.name } };
-    }
-    case types.LOG_OUT: {
-      return { ...state, author: null };
     }
     default: {
       return state;

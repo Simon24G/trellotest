@@ -34,6 +34,9 @@ class CardContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.card.id === this.state.card.id && nextProps.card.id === 0)
+      return;
+
     this.setState(this.getStateFromProps(nextProps));
   }
 
@@ -46,19 +49,13 @@ class CardContainer extends Component {
   };
 
   render() {
-    const { col, authorName, isCreatePhase, close } = this.props;
-
+    const { col, authorName } = this.props;
+    const { card, isCreatePhase } = this.state;
     return (
-      <Card
-        card={this.state.card}
-        authorName={authorName}
-        isCreatePhase={isCreatePhase}
-        close={close}
-        saveCard={this.saveCard}
-      >
+      <Card card={card} saveCard={this.saveCard}>
         <Navigate
           key="Navigate"
-          name={this.state.card.name}
+          name={card.name}
           colName={col.name}
           authorName={authorName}
         />
@@ -67,27 +64,33 @@ class CardContainer extends Component {
             key="ButtonDelete"
             className="btn btn-danger"
             onClick={() => {
-              deleteCard(this.props.card.id);
+              deleteCard(card.id);
             }}
           >
             Delete Card
           </button>
         )}
         {!isCreatePhase && (
-          <CommentContainer
-            key="CommentContainer"
-            cardId={this.state.card.id}
-          />
+          <CommentContainer key="CommentContainer" cardId={card.id} />
         )}
       </Card>
     );
   }
 }
 
-const mapStateToProps = (store, ownProps) => {
+const mapStateToProps = store => {
+  let card,
+    { id, colId } = store.userState.currentCard.card.id;
+  if (id === 0) {
+    card = { id, colId };
+  } else {
+    card = store.boardState.cards.get("" + id);
+  }
+
   return {
-    col: store.boardState.cols.get("" + ownProps.card.colId),
-    authorName: store.boardState.author
+    card,
+    col: store.boardState.cols.get("" + card.colId),
+    authorName: store.userState.author.name
   };
 };
 
@@ -101,16 +104,14 @@ CardContainer.propTypes = {
         id: PropTypes.number.isRequired
       })
     ),
-    coldId: PropTypes.number
+    coldId: PropTypes.number.isRequired
   }).isRequired,
 
   col: PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired
   }).isRequired,
-  authorName: PropTypes.string.isRequired,
-
-  close: PropTypes.func.isRequired
+  authorName: PropTypes.string.isRequired
 };
 
 export default connect(mapStateToProps)(CardContainer);

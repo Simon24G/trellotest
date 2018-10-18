@@ -61,7 +61,7 @@ class CommentContainer extends Component {
 const mapStateToProps = (store, oneProps) => {
   return {
     comments: store.cardState.get("" + oneProps.cardId).comments,
-    authorName: store.boardState.author
+    authorName: store.userState.author.name
   };
 };
 

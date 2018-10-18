@@ -1,11 +1,13 @@
 import { combineReducers } from "redux";
 
-import boardReducers from "./board-reducer.js";
-import cardReducers from "./card-reducer.js";
+import boardReducer from "./board-reducer.js";
+import cardReducer from "./card-reducer.js";
+import userReducer from "./user-reducer.js";
 
 var reducers = combineReducers({
-  boardState: boardReducers,
-  cardState: cardReducers
+  boardState: boardReducer,
+  cardState: cardReducer,
+  userState: userReducer
 });
 
 export default reducers;
