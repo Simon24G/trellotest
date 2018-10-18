@@ -86,21 +86,22 @@ class CardContainer extends Component {
 
 const mapStateToProps = (store, ownProps) => {
   return {
-    col: store.boardState.cols.get("" + ownProps.colId),
+    col: store.boardState.cols.get("" + ownProps.card.colId),
     authorName: store.boardState.author
   };
 };
 
 CardContainer.propTypes = {
   card: PropTypes.shape({
-    id: PropTypes.number,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string,
     description: PropTypes.string,
     comments: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired
       })
-    )
+    ),
+    coldId: PropTypes.number
   }).isRequired,
 
   col: PropTypes.shape({

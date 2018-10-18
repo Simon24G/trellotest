@@ -106,7 +106,8 @@ Card.propTypes = {
       PropTypes.shape({
         id: PropTypes.number.isRequired
       })
-    ).isRequired
+    ).isRequired,
+    colId: PropTypes.number.isRequired
   }).isRequired,
 
   isCreatePhase: PropTypes.bool.isRequired,

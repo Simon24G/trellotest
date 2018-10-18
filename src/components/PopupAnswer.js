@@ -29,7 +29,7 @@ class PopupAnswer extends Component {
     );
   }
 }
-Comment.propTypes = {
+PopupAnswer.propTypes = {
   saveName: PropTypes.func.isRequired
 };
 
