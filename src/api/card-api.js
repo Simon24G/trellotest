@@ -1,4 +1,4 @@
-import * as actions from "/../actions/card-actions.js";
+import * as actions from "../actions/card-actions.js";
 
 export const addCard = (name, description, colId) => (dispatch, getState) => {
   if (description === "" || name === "") return;

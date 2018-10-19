@@ -1,5 +1,5 @@
-import * as actions from "/../actions/user-actions.js";
-
+//import * as actions from "../actions/user-actions.js";
+import * as actions from "../actions/user-action";
 export const logIn = name => (dispatch, getState) => {
   dispatch(actions.logIn(name));
 };

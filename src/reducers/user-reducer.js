@@ -6,12 +6,13 @@ import {
   LOG_IN,
   LOG_OUT,
   CLEAR
-} from "/../actions/action-types.js";
+} from "../actions/action-types.js";
 
 const initialState = {
   author: null,
   currentCard: { openCard: false, card: {} }
 };
+
 //TODO: idea: To card save current values edit card
 const ACTION_HANDLER = {
   [ADD_CARD]: (state, action) => {

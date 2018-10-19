@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Card from "/../veiws/card.js";
-import Navigate from "/../veiws/navigate.js";
-import CommentContainer from "/comment-container.js";
+import Card from "../views/card";
+import Navigate from "../views/navigate.js";
+import CommentContainer from "./comment-container.js";
 
-import { addCard, changeCard, deleteCard } from "/../../api/card-api.js";
+import { addCard, changeCard, deleteCard } from "../../api/card-api.js";
 import { connect } from "react-redux";
-import { closeCard } from "/../../api/user-api.js";
+import { closeCard } from "../../api/user-api.js";
 
 class CardContainer extends Component {
   static propTypes = {

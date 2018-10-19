@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { changeComment, deleteComment } from "/../../api/comment-api.js";
+import { changeComment, deleteComment } from "../../api/comment-api.js";
 
 class Comment extends Component {
   static propTypes = {

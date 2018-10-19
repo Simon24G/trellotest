@@ -1,15 +1,15 @@
 import React from "react";
+import { Provider } from "react-redux";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Board from "/components/veiws/board.js";
-import PopupAnswer from "/components/veiws/popupAnswer.js";
-import CardContainer from "/components/containers/card-container.js";
-import { logOut } from "/api/user-api.js";
-import { clear } from "/api/base-api.js";
-import { Provider } from "react-redux";
-import store from "./store.js";
-function App() {
-  const { authorization, isOpenCardModal, authorName } = this.props;
+import Board from "./components/views/board.js";
+import PopupAnswer from "./components/views/popupAnswer.js";
+import CardContainer from "./components/containers/card-container.js";
+import { logOut } from "./api/user-api.js";
+import { clear } from "./api/base-api.js";
+
+function App(props) {
+  const { authorization, isOpenCardModal, authorName, store } = props;
 
   const body = authorization ? (
     <div>
@@ -62,6 +62,7 @@ const mapStateToProps = store => {
 };
 
 App.propTypes = {
+  store: PropTypes.object,
   authorization: PropTypes.bool.isRequired,
   isOpenCardModal: PropTypes.bool.isRequired,
   authorName: PropTypes.bool.isRequired

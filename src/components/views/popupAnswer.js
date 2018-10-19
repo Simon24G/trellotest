@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { logIn } from "/../../api/user-api.js";
+import { logIn } from "../../api/user-api.js";
 
 class PopupAnswer extends Component {
   constructor(props) {

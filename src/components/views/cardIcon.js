@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { openCard } from "/../api/user-api.js";
+import { openCard } from "../../api/user-api.js";
 import { connect } from "react-redux";
 
 function CardIcon(props) {

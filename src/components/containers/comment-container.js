@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Comment from "/../veiws/card.js";
+import Comment from "../views/card.js";
 
-import { addComment } from "/../../api/comment-api.js";
+import { addComment } from "../../api/comment-api.js";
 import { connect } from "react-redux";
 
 class CommentContainer extends Component {

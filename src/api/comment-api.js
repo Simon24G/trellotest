@@ -1,4 +1,4 @@
-import * as actions from "/../actions/comment-actions.js";
+import * as actions from "../actions/comment-actions.js";
 
 export const addComment = (text, authorName, cardId) => (
   dispatch,

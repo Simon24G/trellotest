@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import CardIcon from "/../veiws/cardIcon.js";
-import { openCard } from "/../api/user-api.js";
-import { changeNameCol } from "/../api/col-api.js";
+import CardIcon from "./cardIcon.js";
+import { openCard } from "../../api/user-api.js";
+import { changeNameCol } from "../../api/col-api.js";
 
 class Col extends Component {
   static propTypes = {

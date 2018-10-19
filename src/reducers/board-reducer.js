@@ -3,15 +3,15 @@ import {
   ADD_CARD,
   DELETE_CARD,
   CLEAR
-} from "/../actions/action-types.js";
+} from "../actions/action-types.js";
 
 function initCols() {
-  let cols = new Map();
+  let cols = [];
   let names = ["TODO", "In Progress", "Testing", "Done"];
   names.forEach((name, id) => {
-    cols.set("" + id, { id, name, cards: new Map() });
+    cols.push({ id, name, cards: [] });
   });
-  return { ...cols };
+  return cols;
 }
 
 const initialState = {
@@ -21,9 +21,19 @@ const initialState = {
 
 const ACTION_HANDLER = {
   [CHANGE_NAME_COL]: (state, action) => {
-    let newState = { ...state };
-    newState.cols.get("" + action.colId).name = action.name;
-    return newState;
+    const { cols } = { ...state };
+    const newCols = cols.map(col => {
+      if (col.id === action.id) {
+        col.name = action.name;
+      }
+
+      return col;
+    });
+
+    return {
+      ...state,
+      cols: newCols
+    };
   },
 
   //dependent from cardReducer
@@ -38,7 +48,7 @@ const ACTION_HANDLER = {
   },
   [DELETE_CARD]: (state, action) => {
     let newState = { ...state };
-    newState.cols.get("" + action.colId).cards.delete("" + action.id);
+    newState.cols.get(action.colId.toString()).cards.delete("" + action.id);
     return newState;
   },
   //base

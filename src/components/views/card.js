@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { closeCard } from "/../../api/user-api.js";
+import { closeCard } from "../../api/user-api.js";
 
 class Card extends Component {
   static propTypes = {

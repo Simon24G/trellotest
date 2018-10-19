@@ -6,7 +6,7 @@ import {
   DELETE_COMMENT,
   CHANGE_COMMENT,
   CLEAR
-} from "/../actions/action-types.js";
+} from "../actions/action-types.js";
 
 const initialState = new Map();
 

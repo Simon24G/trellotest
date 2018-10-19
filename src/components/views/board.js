@@ -8,14 +8,16 @@ function Board(props) {
 
   return (
     <div className="row">
-      {cols.map(col => {
-        return <Col key={col.id} id={col.id} />;
+      {Array.from(cols.values()).map(col => {
+        return <Col key={col.id} col={col} />;
       })}
     </div>
   );
 }
 
 const mapStateToProps = store => {
+  console.log(store);
+  
   return {
     cols: store.boardState.cols
   };
