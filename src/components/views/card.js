@@ -1,8 +1,24 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { closeCard } from "../../api/user-api.js";
+import { closeCard } from "/../../api/user-api.js";
 
 class Card extends Component {
+  static propTypes = {
+    card: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      comments: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired
+        })
+      ).isRequired,
+      colId: PropTypes.number.isRequired
+    }).isRequired,
+
+    saveCard: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -98,21 +114,5 @@ class Card extends Component {
     );
   }
 }
-
-Card.propTypes = {
-  card: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    comments: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired
-      })
-    ).isRequired,
-    colId: PropTypes.number.isRequired
-  }).isRequired,
-
-  saveCard: PropTypes.func.isRequired
-};
 
 export default Card;

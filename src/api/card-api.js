@@ -1,22 +1,24 @@
-import store from "../store.js";
-import * as actions from "../actions/card-actions.js";
+import * as actions from "/../actions/card-actions.js";
 
-export function addCard(name, description, colId) {
+export const addCard = (name, description, colId) => (dispatch, getState) => {
   if (description === "" || name === "") return;
   let id = 1 + +localStorage.getItem("last_id");
   localStorage.setItem("last_id", id);
 
-  store.dispatch(actions.addCard(id, name, description, colId));
-}
+  dispatch(actions.addCard(id, name, description, colId));
+};
 
-export function deleteCard(id, colId) {
-  store.dispatch(actions.deleteCard(id, colId));
-}
+export const deleteCard = (id, colId) => (dispatch, getState) => {
+  dispatch(actions.deleteCard(id, colId));
+};
 
-export function changeCard(id, newName, newDescription) {
+export const changeCard = (id, newName, newDescription) => (
+  dispatch,
+  getState
+) => {
   if (newDescription === "" || newName === "") return;
-  const { name, description } = store.getState().cardState.get("" + id);
+  const { name, description } = getState().cardState.get("" + id);
   if (newDescription === description && newName === name) return;
 
-  store.dispatch(actions.changeCard(id, newName, newDescription));
-}
+  dispatch(actions.changeCard(id, newName, newDescription));
+};

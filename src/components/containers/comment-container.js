@@ -1,11 +1,24 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Comment from "../veiws/card.js";
+import Comment from "/../veiws/card.js";
 
-import { addComment } from "../../api/comment-api.js";
+import { addComment } from "/../../api/comment-api.js";
 import { connect } from "react-redux";
 
 class CommentContainer extends Component {
+  static propTypes = {
+    cardId: PropTypes.number,
+    comments: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        text: PropTypes.string.isRequired,
+        authorName: PropTypes.string.isRequired,
+        cardId: PropTypes.number.isRequired
+      })
+    ).isRequired,
+
+    authorName: PropTypes.string.isRequired
+  };
   constructor(props) {
     super(props);
     this.state = { textComment: "" };
@@ -63,20 +76,6 @@ const mapStateToProps = (store, oneProps) => {
     comments: store.cardState.get("" + oneProps.cardId).comments,
     authorName: store.userState.author.name
   };
-};
-
-CommentContainer.propTypes = {
-  cardId: PropTypes.number,
-  comments: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      text: PropTypes.string.isRequired,
-      authorName: PropTypes.string.isRequired,
-      cardId: PropTypes.number.isRequired
-    })
-  ).isRequired,
-
-  authorName: PropTypes.string.isRequired
 };
 
 export default connect(mapStateToProps)(CommentContainer);

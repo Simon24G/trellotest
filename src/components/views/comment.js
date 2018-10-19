@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { changeComment, deleteComment } from "../../api/comment-api";
+import { changeComment, deleteComment } from "/../../api/comment-api.js";
 
 class Comment extends Component {
+  static propTypes = {
+    comment: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      text: PropTypes.string.isRequired,
+      authorName: PropTypes.string.isRequired,
+      cardId: PropTypes.number.isRequired
+    }).isRequired
+  };
   constructor(props) {
     super(props);
     this.state = { textComment: this.props.comment.text, id: this.comment.id };
@@ -84,14 +92,5 @@ class Comment extends Component {
     );
   }
 }
-
-Comment.propTypes = {
-  comment: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired,
-    authorName: PropTypes.string.isRequired,
-    cardId: PropTypes.number.isRequired
-  }).isRequired
-};
 
 export default Comment;

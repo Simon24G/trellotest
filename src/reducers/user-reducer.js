@@ -1,57 +1,65 @@
-import * as types from "../actions/action-types.js";
+import {
+  ADD_CARD,
+  DELETE_CARD,
+  OPEN_WINDOW_CARD,
+  CLOSE_WINDOW_CARD,
+  LOG_IN,
+  LOG_OUT,
+  CLEAR
+} from "/../actions/action-types.js";
 
 const initialState = {
   author: null,
   currentCard: { openCard: false, card: {} }
 };
 //TODO: idea: To card save current values edit card
-const userReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case types.ADD_CARD: {
-      let newState = { ...state };
-      newState.currentCard.card = { id: action.id, colId: action.colId };
-      return newState;
-    }
+const ACTION_HANDLER = {
+  [ADD_CARD]: (state, action) => {
+    let newState = { ...state };
+    newState.currentCard.card = { id: action.id, colId: action.colId };
+    return newState;
+  },
 
-    case types.DELETE_CARD: {
-      let newState = { ...state };
-      if (newState.currentCard.card.id === action.id) {
-        newState.currentCard.card = { id: 0 };
-        newState.currentCard.openCard = false;
-      }
-      return newState;
-    }
-
-    case types.OPEN_WINDOW_CARD: {
-      let newState = { ...state };
-      newState.currentCard.card = { id: action.id, colId: action.colId };
-      newState.currentCard.openCard = true;
-      return newState;
-    }
-
-    case types.CLOSE_WINDOW_CARD: {
-      let newState = { ...state };
-      newState.currentCard.card = {};
+  [DELETE_CARD]: (state, action) => {
+    let newState = { ...state };
+    if (newState.currentCard.card.id === action.id) {
+      newState.currentCard.card = { id: 0 };
       newState.currentCard.openCard = false;
-      return newState;
     }
+    return newState;
+  },
 
-    case types.LOG_IN: {
-      return { ...state, author: { name: action.name } };
-    }
+  [OPEN_WINDOW_CARD]: (state, action) => {
+    let newState = { ...state };
+    newState.currentCard.card = { id: action.id, colId: action.colId };
+    newState.currentCard.openCard = true;
+    return newState;
+  },
 
-    case types.LOG_OUT: {
-      return { ...state, author: null };
-    }
+  [CLOSE_WINDOW_CARD]: (state, action) => {
+    let newState = { ...state };
+    newState.currentCard.card = {};
+    newState.currentCard.openCard = false;
+    return newState;
+  },
 
-    //base
-    case types.CLEAR: {
-      return initialState;
-    }
-    default: {
-      return state;
-    }
+  [LOG_IN]: (state, action) => {
+    return { ...state, author: { name: action.name } };
+  },
+
+  [LOG_OUT]: (state, action) => {
+    return { ...state, author: null };
+  },
+
+  //base
+  [CLEAR]: (state, action) => {
+    return initialState;
   }
+};
+
+const userReducer = (state = initialState, action) => {
+  const handler = ACTION_HANDLER[action.type];
+  return handler ? handler(state, action) : state;
 };
 
 export default userReducer;

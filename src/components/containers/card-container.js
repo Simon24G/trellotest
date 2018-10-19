@@ -1,14 +1,34 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Card from "./card.js";
-import Navigate from "../veiws/navigate.js";
-import CommentContainer from "./comment-container.js";
+import Card from "/../veiws/card.js";
+import Navigate from "/../veiws/navigate.js";
+import CommentContainer from "/comment-container.js";
 
-import { addCard, changeCard, deleteCard } from "../../api/card-api.js";
+import { addCard, changeCard, deleteCard } from "/../../api/card-api.js";
 import { connect } from "react-redux";
-import { closeCard } from "../../api/user-api.js";
+import { closeCard } from "/../../api/user-api.js";
 
 class CardContainer extends Component {
+  static propTypes = {
+    card: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string,
+      description: PropTypes.string,
+      comments: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired
+        })
+      ),
+      coldId: PropTypes.number.isRequired
+    }).isRequired,
+
+    col: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired
+    }).isRequired,
+    authorName: PropTypes.string.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = this.getStateFromProps(props);
@@ -94,26 +114,6 @@ const mapStateToProps = store => {
     col: store.boardState.cols.get("" + card.colId),
     authorName: store.userState.author.name
   };
-};
-
-CardContainer.propTypes = {
-  card: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string,
-    description: PropTypes.string,
-    comments: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired
-      })
-    ),
-    coldId: PropTypes.number.isRequired
-  }).isRequired,
-
-  col: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired
-  }).isRequired,
-  authorName: PropTypes.string.isRequired
 };
 
 export default connect(mapStateToProps)(CardContainer);

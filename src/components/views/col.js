@@ -1,10 +1,22 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import CardIcon from "../veiws/cardIcon.js";
-import { openCard } from "../api/user-api.js";
-import { changeNameCol } from "../api/col-api.js";
+import CardIcon from "/../veiws/cardIcon.js";
+import { openCard } from "/../api/user-api.js";
+import { changeNameCol } from "/../api/col-api.js";
 
 class Col extends Component {
+  static propTypes = {
+    col: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      cards: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired
+        }).isRequired
+      ).isRequired
+    }).isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = { isEditName: false };
@@ -88,17 +100,5 @@ class Col extends Component {
     );
   }
 }
-
-Col.propTypes = {
-  col: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    cards: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired
-      }).isRequired
-    ).isRequired
-  }).isRequired
-};
 
 export default Col;
