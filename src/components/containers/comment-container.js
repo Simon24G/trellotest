@@ -60,7 +60,7 @@ class CommentContainer extends Component {
               <b>Comments:</b>
             </p>
             <div>
-              {comments.map(comment => {
+              {Array.from(comments.values()).map(comment => {
                 return <Comment key={comment.id} comment={comment} />;
               })}
             </div>
@@ -73,7 +73,7 @@ class CommentContainer extends Component {
 
 const mapStateToProps = (store, oneProps) => {
   return {
-    comments: store.cardState.get("" + oneProps.cardId).comments,
+    comments: store.cardState.get(oneProps.cardId.toString()).comments,
     authorName: store.userState.author.name
   };
 };

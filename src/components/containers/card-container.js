@@ -105,13 +105,13 @@ const mapStateToProps = store => {
   if (id === 0) {
     card = { id, colId };
   } else {
-    if (!store.boardState.cards.has("" + id)) closeCard();
-    card = store.boardState.cards.get("" + id);
+    if (!store.boardState.cards.has(id.toString())) closeCard();
+    card = store.boardState.cards.get(id.toString());
   }
 
   return {
     card,
-    col: store.boardState.cols.get("" + card.colId),
+    col: store.boardState.cols.get(card.colId.toString()),
     authorName: store.userState.author.name
   };
 };

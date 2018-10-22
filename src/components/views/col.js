@@ -78,7 +78,7 @@ class Col extends Component {
           <div className="card-header">Name Col: {formColName} </div>
           <div className="card-body">
             <div>
-              {cards.map(card => {
+              {Array.from(cards.values()).map(card => {
                 return <CardIcon key={card.id} id={card.id} />;
               })}
             </div>

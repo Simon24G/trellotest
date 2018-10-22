@@ -17,7 +17,7 @@ function Board(props) {
 
 const mapStateToProps = store => {
   console.log(store);
-  
+
   return {
     cols: store.boardState.cols
   };

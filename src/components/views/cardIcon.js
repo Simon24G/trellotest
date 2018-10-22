@@ -30,7 +30,7 @@ function CardIcon(props) {
 
 const mapStateToProps = (store, ownProps) => {
   return {
-    card: store.cardState.get("" + ownProps.id)
+    card: store.cardState.get(ownProps.id.toString())
   };
 };
 

@@ -12,8 +12,8 @@ const initialState = new Map();
 
 const ACTION_HANDLER = {
   [ADD_CARD]: (state, action) => {
+    console.log(state);
     let { id, name, description, colId } = action;
-    //let id = 1 + +localStorage.getItem("last_id");
     let card = {
       id,
       name,
@@ -22,17 +22,17 @@ const ACTION_HANDLER = {
       colId
     };
     let cards = { ...state };
-    cards.set("" + id, card);
+    cards.set(id.toString(), card);
     return cards;
   },
   [DELETE_CARD]: (state, action) => {
     let cards = { ...state };
-    cards.delete("" + action.id);
+    cards.delete(action.id.toString());
     return cards;
   },
   [CHANGE_CARD]: (state, action) => {
     let cards = { ...state }; //Object.assign({}, state);
-    let card = cards.get("" + action.id);
+    let card = cards.get(action.id.toString());
     card.name = action.name;
     card.description = action.description;
     //auto update cards?
@@ -47,19 +47,21 @@ const ACTION_HANDLER = {
       cardId
     };
     let cards = { ...state };
-    let card = cards.get("" + cardId);
-    card.comments.set("" + id, comment);
+    let card = cards.get(cardId.toString());
+    card.comments.set(id.toString(), comment);
     //call boardReducer with { ...action, id }
     return cards;
   },
   [DELETE_COMMENT]: (state, action) => {
     let cards = { ...state };
-    cards.get("" + action.cardId).comments.delete("" + action.id);
+    cards.get(action.cardId.toString()).comments.delete(action.id.toString());
     return cards;
   },
   [CHANGE_COMMENT]: (state, action) => {
     let cards = { ...state };
-    let card = cards.get("" + action.cardId).comments.get("" + action.id);
+    let card = cards
+      .get(action.cardId.toString())
+      .comments.get(action.id.toString());
     card.text = action.text;
     return cards;
   },

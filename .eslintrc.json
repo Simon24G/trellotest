@@ -1,0 +1,68 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "airbnb",
+        "prettier"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "arrowFunctions": true,
+            "classes": true,
+            "generators": true,
+            "modules": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "import/no-unresolved": "off",
+        "import/extensions": [
+            2,
+            {
+                "js": "never"
+            }
+        ],
+        "strict": 0,
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx"
+                ]
+            }
+        ],
+        "react/prop-types": [
+            0
+        ],
+        "jsx-a11y/anchor-is-valid": [
+            "error",
+            {
+                "components": [
+                    "Link"
+                ],
+                "specialLink": [
+                    "to",
+                    "hrefLeft",
+                    "hrefRight"
+                ],
+                "aspects": [
+                    "noHref",
+                    "invalidHref",
+                    "preferButton"
+                ]
+            }
+        ],
+        "react/jsx-one-expression-per-line": [
+            0
+        ]
+    }
+}
