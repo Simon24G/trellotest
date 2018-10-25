@@ -4,14 +4,14 @@ import { openCard } from "../../api/user-api.js";
 import { connect } from "react-redux";
 
 function CardIcon(props) {
-  const { card } = props;
+  const { card, openCard } = props;
   const { name, description, comments } = card;
   const countComments = comments.length;
   return (
     <div>
       <div
         onClick={() => {
-          openCard(props.card.id);
+          openCard(card.id);
         }}
         className="card text-white bg-success mb-3"
       >
@@ -28,6 +28,12 @@ function CardIcon(props) {
   );
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    openCard: id => dispatch(openCard(id))
+  };
+};
+
 const mapStateToProps = (store, ownProps) => {
   return {
     card: store.cardState.get(ownProps.id.toString())
@@ -40,13 +46,13 @@ CardIcon.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    comments: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired
-      })
-    ).isRequired,
+    comments: PropTypes.objectOf.isRequired,
     colId: PropTypes.number.isRequired
-  }).isRequired
+  }).isRequired,
+  openCard: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps)(CardIcon);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CardIcon);

@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Comment from "../views/card.js";
 
-import { addComment } from "../../api/comment-api.js";
+import {
+  addComment,
+  changeComment,
+  deleteComment
+} from "../../api/comment-api.js";
+
 import { connect } from "react-redux";
 
 class CommentContainer extends Component {
@@ -16,8 +21,9 @@ class CommentContainer extends Component {
         cardId: PropTypes.number.isRequired
       })
     ).isRequired,
+    authorName: PropTypes.string.isRequired,
 
-    authorName: PropTypes.string.isRequired
+    addComment: PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
@@ -26,7 +32,7 @@ class CommentContainer extends Component {
 
   saveComment = e => {
     e.preventDefault();
-    addComment(
+    this.props.addComment(
       this.state.textComment,
       this.props.authorName,
       this.props.cardId
@@ -34,7 +40,7 @@ class CommentContainer extends Component {
   };
 
   render() {
-    const comments = this.props.comments;
+    const { comments, changeComment, deleteComment } = this.props;
     return (
       <div>
         <form onSubmit={this.saveComment}>
@@ -60,8 +66,15 @@ class CommentContainer extends Component {
               <b>Comments:</b>
             </p>
             <div>
-              {Array.from(comments.values()).map(comment => {
-                return <Comment key={comment.id} comment={comment} />;
+              {comments.map(comment => {
+                return (
+                  <Comment
+                    key={comment.id}
+                    comment={comment}
+                    changeComment={changeComment}
+                    deleteComment={deleteComment}
+                  />
+                );
               })}
             </div>
           </div>
@@ -71,11 +84,26 @@ class CommentContainer extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    addComment: (text, authorName, cardId) =>
+      dispatch(addComment(text, authorName, cardId)),
+    changeComment: (id, text, cardId) =>
+      dispatch(changeComment(id, text, cardId)),
+    deleteComment: (id, cardId) => dispatch(deleteComment(id, cardId))
+  };
+};
+
 const mapStateToProps = (store, oneProps) => {
   return {
-    comments: store.cardState.get(oneProps.cardId.toString()).comments,
+    comments: Array.from(
+      store.cardState.get(oneProps.cardId.toString()).comments.values()
+    ),
     authorName: store.userState.author.name
   };
 };
 
-export default connect(mapStateToProps)(CommentContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommentContainer);

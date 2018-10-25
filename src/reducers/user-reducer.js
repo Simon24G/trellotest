@@ -8,9 +8,11 @@ import {
   CLEAR
 } from "../actions/action-types.js";
 
-const initialState = {
-  author: null,
-  currentCard: { openCard: false, card: {} }
+const initialState = () => {
+  return {
+    author: null,
+    currentCard: { openCard: false, card: {} }
+  };
 };
 
 //TODO: idea: To card save current values edit card
@@ -54,11 +56,11 @@ const ACTION_HANDLER = {
 
   //base
   [CLEAR]: (state, action) => {
-    return initialState;
+    return initialState();
   }
 };
 
-const userReducer = (state = initialState, action) => {
+const userReducer = (state = initialState(), action) => {
   const handler = ACTION_HANDLER[action.type];
   return handler ? handler(state, action) : state;
 };

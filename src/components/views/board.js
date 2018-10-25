@@ -8,7 +8,11 @@ function Board(props) {
 
   return (
     <div className="row">
-      {Array.from(cols.values()).map(col => {
+      {cols.map(col => {
+        console.log("Col before put newProps " + col.name);
+        console.log("key: ", col.id);
+        console.log("col: ", col);
+        console.log("_________________________________________");
         return <Col key={col.id} col={col} />;
       })}
     </div>
@@ -16,10 +20,10 @@ function Board(props) {
 }
 
 const mapStateToProps = store => {
-  console.log(store);
+  console.log("Store: ", store);
 
   return {
-    cols: store.boardState.cols
+    cols: Array.from(store.boardState.cols.values())
   };
 };
 
@@ -28,11 +32,7 @@ Board.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      cards: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number.isRequired
-        }).isRequired
-      ).isRequired
+      cards: PropTypes.objectOf.isRequired
     })
   ).isRequired
 };

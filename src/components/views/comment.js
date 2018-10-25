@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { changeComment, deleteComment } from "../../api/comment-api.js";
 
 class Comment extends Component {
   static propTypes = {
@@ -9,7 +8,10 @@ class Comment extends Component {
       text: PropTypes.string.isRequired,
       authorName: PropTypes.string.isRequired,
       cardId: PropTypes.number.isRequired
-    }).isRequired
+    }).isRequired,
+
+    changeComment: PropTypes.func.isRequired,
+    deleteComment: PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
@@ -27,7 +29,7 @@ class Comment extends Component {
   updateComment = e => {
     e.preventDefault();
     const { id, cardId } = this.props.comment;
-    changeComment(id, this.state.textComment, cardId);
+    this.changeComment(id, this.state.textComment, cardId);
     this.setState(prevState => {
       return {
         regim: false,
@@ -39,7 +41,7 @@ class Comment extends Component {
   delete = e => {
     e.preventDefault();
     const { id, cardId } = this.props.comment;
-    deleteComment(id, cardId);
+    this.deleteComment(id, cardId);
   };
   edit = () => {
     this.setState({
@@ -49,9 +51,10 @@ class Comment extends Component {
   //problem при удалении комментариев во время редактирования может сместиться id редактируемого
   render() {
     const { textComment, regim } = this.state;
+    const { authorName, text } = this.props.comment;
     return (
       <div>
-        <p>Author: {this.props.comment.authorName}</p>
+        <p>Author: {authorName}</p>
         {regim ? (
           <form onSubmit={this.updateComment}>
             <textarea
@@ -77,7 +80,7 @@ class Comment extends Component {
           </form>
         ) : (
           <div>
-            <pre className="comment">{this.props.comment.text}</pre>
+            <pre className="comment">{text}</pre>
             <div className="btn-group" role="group" aria-label="Basic example">
               <button className="btn btn-primary" onClick={this.edit}>
                 edit

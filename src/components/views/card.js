@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { closeCard } from "../../api/user-api.js";
 
 class Card extends Component {
   static propTypes = {
@@ -8,15 +7,12 @@ class Card extends Component {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
-      comments: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number.isRequired
-        })
-      ).isRequired,
+      comments: PropTypes.object.isRequired,
       colId: PropTypes.number.isRequired
     }).isRequired,
 
-    saveCard: PropTypes.func.isRequired
+    saveCard: PropTypes.func.isRequired,
+    closeCard: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -41,6 +37,7 @@ class Card extends Component {
   };
 
   render() {
+    const { closeCard } = this.props;
     const { name, description } = this.state;
     const children = React.Children.toArray(this.props.children);
 

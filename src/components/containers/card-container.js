@@ -5,8 +5,9 @@ import Navigate from "../views/navigate.js";
 import CommentContainer from "./comment-container.js";
 
 import { addCard, changeCard, deleteCard } from "../../api/card-api.js";
-import { connect } from "react-redux";
 import { closeCard } from "../../api/user-api.js";
+
+import { connect } from "react-redux";
 
 class CardContainer extends Component {
   static propTypes = {
@@ -14,19 +15,20 @@ class CardContainer extends Component {
       id: PropTypes.number.isRequired,
       name: PropTypes.string,
       description: PropTypes.string,
-      comments: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number.isRequired
-        })
-      ),
-      coldId: PropTypes.number.isRequired
+      comments: PropTypes.object,
+      coldId: PropTypes.number
     }).isRequired,
 
     col: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
     }).isRequired,
-    authorName: PropTypes.string.isRequired
+    authorName: PropTypes.string.isRequired,
+
+    addCard: PropTypes.func.isRequired,
+    changeCard: PropTypes.func.isRequired,
+    deleteCard: PropTypes.func.isRequired,
+    closeCard: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -42,12 +44,14 @@ class CardContainer extends Component {
         id: 0,
         name: "",
         description: "",
-        comments: [],
+        comments: new Map(),
         colId: nextProps.col.id
       };
     } else {
       card = nextProps.card;
     }
+    console.log("card.id");
+    console.log(card.id);
     return {
       card,
       isCreatePhase
@@ -57,23 +61,27 @@ class CardContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.card.id === this.state.card.id && nextProps.card.id === 0)
       return;
-
     this.setState(this.getStateFromProps(nextProps));
   }
 
   saveCard = (name, description) => {
     if (this.state.isCreatePhase) {
-      addCard(name, description, this.props.col.id);
+      this.props.addCard(name, description, this.props.col.id);
     } else {
-      changeCard(this.state.id, name, description, this.props.col.id);
+      this.props.changeCard(
+        this.state.card.id,
+        name,
+        description,
+        this.props.col.id
+      );
     }
   };
 
   render() {
-    const { col, authorName } = this.props;
+    const { col, authorName, deleteCard, closeCard } = this.props;
     const { card, isCreatePhase } = this.state;
     return (
-      <Card card={card} saveCard={this.saveCard}>
+      <Card card={card} saveCard={this.saveCard} closeCard={closeCard}>
         <Navigate
           key="Navigate"
           name={card.name}
@@ -99,14 +107,25 @@ class CardContainer extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    addCard: (name, description, colId) =>
+      dispatch(addCard(name, description, colId)),
+    changeCard: (id, name, description, colId) =>
+      dispatch(changeCard(id, name, description, colId)),
+    deleteCard: () => dispatch(deleteCard()),
+    closeCard: () => dispatch(closeCard())
+  };
+};
+
 const mapStateToProps = store => {
   let card,
-    { id, colId } = store.userState.currentCard.card.id;
+    { id, colId } = store.userState.currentCard.card;
   if (id === 0) {
     card = { id, colId };
   } else {
-    if (!store.boardState.cards.has(id.toString())) closeCard();
-    card = store.boardState.cards.get(id.toString());
+    if (!store.cardState.has(id.toString())) closeCard();
+    card = store.cardState.get(id.toString());
   }
 
   return {
@@ -116,4 +135,7 @@ const mapStateToProps = store => {
   };
 };
 
-export default connect(mapStateToProps)(CardContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CardContainer);

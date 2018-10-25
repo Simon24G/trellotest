@@ -1,7 +1,13 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
 import { logIn } from "../../api/user-api.js";
 
 class PopupAnswer extends Component {
+  static propTypes = {
+    logIn: PropTypes.func.isRequired
+  };
   constructor(props) {
     super(props);
     this.state = { name: "" };
@@ -9,7 +15,7 @@ class PopupAnswer extends Component {
   saveName = event => {
     event.preventDefault();
     if (this.state.name === "") return;
-    logIn(this.state.name);
+    this.props.logIn(this.state.name);
   };
 
   render() {
@@ -29,5 +35,12 @@ class PopupAnswer extends Component {
     );
   }
 }
-
-export default PopupAnswer;
+const mapDispatchToProps = dispatch => {
+  return {
+    logIn: name => dispatch(logIn(name))
+  };
+};
+export default connect(
+  null,
+  mapDispatchToProps
+)(PopupAnswer);

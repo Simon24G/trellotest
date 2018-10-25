@@ -3,23 +3,29 @@ import PropTypes from "prop-types";
 import CardIcon from "./cardIcon.js";
 import { openCard } from "../../api/user-api.js";
 import { changeNameCol } from "../../api/col-api.js";
+import { connect } from "react-redux";
 
 class Col extends Component {
   static propTypes = {
     col: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      cards: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.number.isRequired
-        }).isRequired
-      ).isRequired
-    }).isRequired
+      cards: PropTypes.objectOf.isRequired
+    }).isRequired,
+
+    openCard: PropTypes.func.isRequired,
+    changeNameCol: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
     this.state = { isEditName: false };
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log("Col WillReceiveProps " + this.props.col.name);
+    console.log("new props: ", nextProps);
+    console.log("old props: ", this.props);
+    console.log("_________________________________________");
   }
 
   editName = () => {
@@ -28,8 +34,9 @@ class Col extends Component {
       nameCol: this.props.col.name
     });
   };
-  saveName = () => {
-    changeNameCol(this.props.col.id, this.state.nameCol);
+  saveName = e => {
+    e.preventDefault();
+    this.props.changeNameCol(this.props.col.id, this.state.nameCol);
     this.setState({
       isEditName: false
     });
@@ -39,19 +46,24 @@ class Col extends Component {
       isEditName: false
     });
   };
+  changeName = e => {
+    this.setState({
+      nameCol: e.target.value
+    });
+  };
   render() {
     const { id, name, cards } = this.props.col;
     const { nameCol, isEditName } = this.state;
+    console.log("Col render " + name);
+    console.log("cards: ", cards);
+    console.log("array cards: ", Array.from(cards.values()));
+    console.log("_________________________________________");
 
     const formColName = isEditName ? (
       <form onSubmit={this.saveName}>
         <input
           type="text"
-          onChange={e => {
-            this.setState({
-              nameCol: e.target.value
-            });
-          }}
+          onChange={this.changeName}
           className="form-control"
           value={nameCol}
           required
@@ -88,7 +100,7 @@ class Col extends Component {
                 type="button"
                 className="btn btn-success"
                 onClick={() => {
-                  openCard(0, id);
+                  this.props.openCard(0, id);
                 }}
               >
                 +
@@ -101,4 +113,22 @@ class Col extends Component {
   }
 }
 
-export default Col;
+const mapStateToProps = (store, oneProps) => {
+  console.log("Store to Col: " + oneProps.col.name, store);
+
+  return {
+    col: store.boardState.cols.get(oneProps.col.id.toString())
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    changeNameCol: (id, name) => dispatch(changeNameCol(id, name)),
+    openCard: (id, colId) => dispatch(openCard(id, colId))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Col);

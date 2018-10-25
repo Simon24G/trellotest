@@ -14,15 +14,18 @@ function initCols() {
   return cols;
 }
 
-const initialState = {
-  id: 1,
-  cols: initCols()
+//{...initialState} , Object.assign({},initialState) - does not help
+const initialState = () => {
+  return {
+    id: 1,
+    cols: initCols()
+  };
 };
 
 const ACTION_HANDLER = {
   [CHANGE_NAME_COL]: (state, action) => {
     const { cols } = { ...state };
-    cols.get(action.id.toString).name = action.name;
+    cols.get(action.id.toString()).name = action.name;
     return {
       ...state,
       cols
@@ -52,11 +55,11 @@ const ACTION_HANDLER = {
   },
   //base
   [CLEAR]: (state, action) => {
-    return initialState;
+    return initialState(); //show if initialState
   }
 };
 
-const boardReducer = (state = initialState, action) => {
+const boardReducer = (state = initialState(), action) => {
   const handler = ACTION_HANDLER[action.type];
   return handler ? handler(state, action) : state;
 };
