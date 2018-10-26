@@ -8,62 +8,52 @@ import {
   CLEAR
 } from "../actions/action-types.js";
 
-const initialState = () => new Map();
+const initialState = () => {
+  return {};
+};
 
 const ACTION_HANDLER = {
-  [ADD_CARD]: (state, action) => {
-    let { id, name, description, colId } = action;
+  [ADD_CARD]: (state, { id, name, description, colId }) => {
     let card = {
       id,
       name,
       description,
-      comments: new Map(),
+      comments: {},
       colId
     };
-    let cards = new Map(state);
-    cards.set(id.toString(), card);
-    console.log(cards);
-
+    return { ...state, [id.toString()]: card };
+  },
+  [DELETE_CARD]: (state, { id }) => {
+    let cards = { ...state };
+    delete cards[id.toString()];
     return cards;
   },
-  [DELETE_CARD]: (state, action) => {
-    let cards = new Map(state);
-    cards.delete(action.id.toString());
+  [CHANGE_CARD]: (state, { id, name, description }) => {
+    let cards = { ...state };
+    let card = cards[id.toString()];
+    card.name = name;
+    card.description = description;
     return cards;
   },
-  [CHANGE_CARD]: (state, action) => {
-    let cards = new Map(state); //Object.assign({}, state);
-    let card = cards.get(action.id.toString());
-    card.name = action.name;
-    card.description = action.description;
-    //auto update cards?
-    return cards;
-  },
-  [ADD_COMMENT]: (state, action) => {
-    let { id, text, authorName, cardId } = action;
+  [ADD_COMMENT]: (state, { id, text, authorName, cardId }) => {
     let comment = {
       id,
       text,
       authorName,
       cardId
     };
-    let cards = new Map(state);
-    let card = cards.get(cardId.toString());
-    card.comments.set(id.toString(), comment);
-    //call boardReducer with { ...action, id }
+    let cards = { ...state };
+    cards[cardId.toString()].comments[id.toString()] = comment;
     return cards;
   },
-  [DELETE_COMMENT]: (state, action) => {
-    let cards = new Map(state);
-    cards.get(action.cardId.toString()).comments.delete(action.id.toString());
+  [DELETE_COMMENT]: (state, { id, cardId }) => {
+    let cards = { ...state };
+    delete cards[cardId.toString()].comments[id.toString()];
     return cards;
   },
-  [CHANGE_COMMENT]: (state, action) => {
-    let cards = new Map(state);
-    let card = cards
-      .get(action.cardId.toString())
-      .comments.get(action.id.toString());
-    card.text = action.text;
+  [CHANGE_COMMENT]: (state, { id, text, cardId }) => {
+    let cards = { ...state };
+    cards[cardId.toString()].comments[id.toString()].text = text;
     return cards;
   },
   [CLEAR]: (state, action) => {

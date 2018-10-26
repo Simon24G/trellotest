@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 function CardIcon(props) {
   const { card, openCard } = props;
   const { name, description, comments } = card;
-  const countComments = comments.length;
+  const countComments = Object.keys(comments).length;
   return (
     <div>
       <div
@@ -36,7 +36,7 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = (store, ownProps) => {
   return {
-    card: store.cardState.get(ownProps.id.toString())
+    card: store.cardState[ownProps.id.toString()]
   };
 };
 
@@ -46,7 +46,14 @@ CardIcon.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    comments: PropTypes.objectOf.isRequired,
+    comments: PropTypes.objectOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        text: PropTypes.string.isRequired,
+        authorName: PropTypes.string.isRequired,
+        cardId: PropTypes.number.isRequired
+      }).isRequired
+    ),
     colId: PropTypes.number.isRequired
   }).isRequired,
   openCard: PropTypes.func.isRequired

@@ -10,7 +10,12 @@ class Col extends Component {
     col: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      cards: PropTypes.objectOf.isRequired
+      cards: PropTypes.objectOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          colId: PropTypes.number.isRequired
+        })
+      ).isRequired
     }).isRequired,
 
     openCard: PropTypes.func.isRequired,
@@ -56,7 +61,6 @@ class Col extends Component {
     const { nameCol, isEditName } = this.state;
     console.log("Col render " + name);
     console.log("cards: ", cards);
-    console.log("array cards: ", Array.from(cards.values()));
     console.log("_________________________________________");
 
     const formColName = isEditName ? (
@@ -84,16 +88,21 @@ class Col extends Component {
       </div>
     );
 
+    let cardsIconsComponets = [];
+    for (var key in cards) {
+      if (cards.hasOwnProperty(key)) {
+        cardsIconsComponets.push(
+          <CardIcon key={cards[key].id} id={cards[key].id} />
+        );
+      }
+    }
+
     return (
       <div className="col">
         <div className="card text-white bg-primary mb-3">
           <div className="card-header">Name Col: {formColName} </div>
           <div className="card-body">
-            <div>
-              {Array.from(cards.values()).map(card => {
-                return <CardIcon key={card.id} id={card.id} />;
-              })}
-            </div>
+            <div>{cardsIconsComponets}</div>
             <div>
               Вставьте новую карточку{" "}
               <button
@@ -117,7 +126,7 @@ const mapStateToProps = (store, oneProps) => {
   console.log("Store to Col: " + oneProps.col.name, store);
 
   return {
-    col: store.boardState.cols.get(oneProps.col.id.toString())
+    col: store.boardState.cols[oneProps.col.id.toString()]
   };
 };
 

@@ -17,8 +17,7 @@ export const changeCard = (id, newName, newDescription) => (
   getState
 ) => {
   if (newDescription === "" || newName === "") return;
-  console.log(id);
-  const { name, description } = getState().cardState.get("" + id);
+  const { name, description } = getState().cardState[id.toString()];
   if (newDescription === description && newName === name) return;
 
   dispatch(actions.changeCard(id, newName, newDescription));

@@ -6,33 +6,35 @@ import { connect } from "react-redux";
 function Board(props) {
   const { cols } = props;
 
-  return (
-    <div className="row">
-      {cols.map(col => {
-        console.log("Col before put newProps " + col.name);
-        console.log("key: ", col.id);
-        console.log("col: ", col);
-        console.log("_________________________________________");
-        return <Col key={col.id} col={col} />;
-      })}
-    </div>
-  );
+  let colsComponets = [];
+  for (var key in cols) {
+    if (cols.hasOwnProperty(key)) {
+      colsComponets.push(<Col key={cols[key].id} col={cols[key]} />);
+    }
+  }
+  console.log(colsComponets);
+  return <div className="row">{colsComponets}</div>;
 }
 
 const mapStateToProps = store => {
   console.log("Store: ", store);
 
   return {
-    cols: Array.from(store.boardState.cols.values())
+    cols: store.boardState.cols
   };
 };
 
 Board.propTypes = {
-  cols: PropTypes.arrayOf(
+  cols: PropTypes.objectOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      cards: PropTypes.objectOf.isRequired
+      cards: PropTypes.objectOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          colId: PropTypes.number.isRequired
+        })
+      ).isRequired
     })
   ).isRequired
 };

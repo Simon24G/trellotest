@@ -13,13 +13,13 @@ import { connect } from "react-redux";
 class CommentContainer extends Component {
   static propTypes = {
     cardId: PropTypes.number,
-    comments: PropTypes.arrayOf(
+    comments: PropTypes.objectOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,
         text: PropTypes.string.isRequired,
         authorName: PropTypes.string.isRequired,
         cardId: PropTypes.number.isRequired
-      })
+      }).isRequired
     ).isRequired,
     authorName: PropTypes.string.isRequired,
 
@@ -41,6 +41,21 @@ class CommentContainer extends Component {
 
   render() {
     const { comments, changeComment, deleteComment } = this.props;
+
+    let commentsComponets = [];
+    for (var key in comments) {
+      if (comments.hasOwnProperty(key)) {
+        commentsComponets.push(
+          <Comment
+            key={comments[key].id}
+            comment={comments[key]}
+            changeComment={changeComment}
+            deleteComment={deleteComment}
+          />
+        );
+      }
+    }
+
     return (
       <div>
         <form onSubmit={this.saveComment}>
@@ -60,23 +75,12 @@ class CommentContainer extends Component {
             OK
           </button>
         </form>
-        {comments.length > 0 && (
+        {commentsComponets.length > 0 && (
           <div>
             <p>
               <b>Comments:</b>
             </p>
-            <div>
-              {comments.map(comment => {
-                return (
-                  <Comment
-                    key={comment.id}
-                    comment={comment}
-                    changeComment={changeComment}
-                    deleteComment={deleteComment}
-                  />
-                );
-              })}
-            </div>
+            <div>{commentsComponets}</div>
           </div>
         )}
       </div>
@@ -96,9 +100,7 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = (store, oneProps) => {
   return {
-    comments: Array.from(
-      store.cardState.get(oneProps.cardId.toString()).comments.values()
-    ),
+    comments: store.cardState[oneProps.cardId.toString()].comments,
     authorName: store.userState.author.name
   };
 };

@@ -15,7 +15,14 @@ class CardContainer extends Component {
       id: PropTypes.number.isRequired,
       name: PropTypes.string,
       description: PropTypes.string,
-      comments: PropTypes.object,
+      comments: PropTypes.objectOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          text: PropTypes.string.isRequired,
+          authorName: PropTypes.string.isRequired,
+          cardId: PropTypes.number.isRequired
+        }).isRequired
+      ),
       coldId: PropTypes.number
     }).isRequired,
 
@@ -80,8 +87,15 @@ class CardContainer extends Component {
   render() {
     const { col, authorName, deleteCard, closeCard } = this.props;
     const { card, isCreatePhase } = this.state;
+
     return (
-      <Card card={card} saveCard={this.saveCard} closeCard={closeCard}>
+      <Card
+        card={card}
+        col={col}
+        authorName={authorName}
+        saveCard={this.saveCard}
+        closeCard={closeCard}
+      >
         <Navigate
           key="Navigate"
           name={card.name}
@@ -124,13 +138,13 @@ const mapStateToProps = store => {
   if (id === 0) {
     card = { id, colId };
   } else {
-    if (!store.cardState.has(id.toString())) closeCard();
-    card = store.cardState.get(id.toString());
+    if (!(id.toString() in store.cardState)) closeCard();
+    card = store.cardState[id.toString()];
   }
 
   return {
     card,
-    col: store.boardState.cols.get(card.colId.toString()),
+    col: store.boardState.cols[card.colId.toString()],
     authorName: store.userState.author.name
   };
 };

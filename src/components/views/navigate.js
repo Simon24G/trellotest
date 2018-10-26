@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Navigate = (name, colName, authorName) => (
+const Navigate = ({ name, colName, authorName }) => (
   <nav aria-label="breadcrumb">
     <ol className="breadcrumb">
       <li className="breadcrumb-item">Card name: {name}</li>

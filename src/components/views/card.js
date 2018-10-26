@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+//import Navigate from "../views/navigate.js";
 
 class Card extends Component {
   static propTypes = {
@@ -7,7 +8,14 @@ class Card extends Component {
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
-      comments: PropTypes.object.isRequired,
+      comments: PropTypes.objectOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          text: PropTypes.string.isRequired,
+          authorName: PropTypes.string.isRequired,
+          cardId: PropTypes.number.isRequired
+        }).isRequired
+      ),
       colId: PropTypes.number.isRequired
     }).isRequired,
 
@@ -37,17 +45,21 @@ class Card extends Component {
   };
 
   render() {
-    const { closeCard } = this.props;
+    const { closeCard, children } = this.props;
     const { name, description } = this.state;
-    const children = React.Children.toArray(this.props.children);
+    //const children = this.props.children;
 
+    console.log("render card: ");
     return (
       <div className="modal" tabIndex="-1" role="dialog">
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">
-                {children.find(child => child.key === "Navigate")}
+                {React.Children.map(
+                  children,
+                  child => child && child.key === "Navigate" && child
+                )}
               </h5>
               <button
                 type="button"
@@ -100,10 +112,16 @@ class Card extends Component {
                   <button className="btn btn-primary" type="submit">
                     Save
                   </button>
-                  {children.find(child => child.key === "ButtonDelete")}
+                  {React.Children.map(
+                    children,
+                    child => child && child.key === "ButtonDelete" && child
+                  )}
                 </div>
               </form>
-              {children.find(child => child.key === "CommentContainer")}
+              {React.Children.map(
+                children,
+                child => child && child.key === "CommentContainer" && child
+              )}
             </div>
           </div>
         </div>

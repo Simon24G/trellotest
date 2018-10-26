@@ -17,24 +17,24 @@ const initialState = () => {
 
 //TODO: idea: To card save current values edit card
 const ACTION_HANDLER = {
-  [ADD_CARD]: (state, action) => {
+  [ADD_CARD]: (state, { id, colId }) => {
     let newState = { ...state };
-    newState.currentCard.card = { id: action.id, colId: action.colId };
+    newState.currentCard.card = { id, colId };
     return newState;
   },
 
-  [DELETE_CARD]: (state, action) => {
+  [DELETE_CARD]: (state, { id }) => {
     let newState = { ...state };
-    if (newState.currentCard.card.id === action.id) {
+    if (newState.currentCard.card.id === id) {
       newState.currentCard.card = { id: 0 };
       newState.currentCard.openCard = false;
     }
     return newState;
   },
 
-  [OPEN_WINDOW_CARD]: (state, action) => {
+  [OPEN_WINDOW_CARD]: (state, { id, colId }) => {
     let newState = { ...state };
-    newState.currentCard.card = { id: action.id, colId: action.colId };
+    newState.currentCard.card = { id, colId };
     newState.currentCard.openCard = true;
     return newState;
   },
@@ -46,8 +46,8 @@ const ACTION_HANDLER = {
     return newState;
   },
 
-  [LOG_IN]: (state, action) => {
-    return { ...state, author: { name: action.name } };
+  [LOG_IN]: (state, { name }) => {
+    return { ...state, author: { name } };
   },
 
   [LOG_OUT]: (state, action) => {

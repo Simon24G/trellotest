@@ -6,10 +6,10 @@ import {
 } from "../actions/action-types.js";
 
 function initCols() {
-  let cols = new Map();
+  let cols = {};
   let names = ["TODO", "In Progress", "Testing", "Done"];
   names.forEach((name, id) => {
-    cols.set("" + id, { id, name, cards: new Map() });
+    cols[id.toString()] = { id, name, cards: {} };
   });
   return cols;
 }
@@ -23,9 +23,9 @@ const initialState = () => {
 };
 
 const ACTION_HANDLER = {
-  [CHANGE_NAME_COL]: (state, action) => {
+  [CHANGE_NAME_COL]: (state, { id, name }) => {
     const { cols } = { ...state };
-    cols.get(action.id.toString()).name = action.name;
+    cols[id.toString()].name = name;
     return {
       ...state,
       cols
@@ -33,21 +33,20 @@ const ACTION_HANDLER = {
   },
 
   //dependent from cardReducer
-  [ADD_CARD]: (state, action) => {
-    let { id, colId } = action;
+  [ADD_CARD]: (state, { id, colId }) => {
     let { cols } = { ...state };
-    cols.get("" + colId).cards.set("" + id, {
+    cols[colId.toString()].cards[id.toString()] = {
       id,
       colId
-    });
+    };
     return {
       ...state,
       cols
     };
   },
-  [DELETE_CARD]: (state, action) => {
+  [DELETE_CARD]: (state, { id, colId }) => {
     let { cols } = { ...state };
-    cols.get(action.colId.toString()).cards.delete("" + action.id);
+    delete cols[colId.toString()].cards[id.toString()];
     return {
       ...state,
       cols
