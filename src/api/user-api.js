@@ -9,7 +9,6 @@ export const logOut = () => (dispatch, getState) => {
 };
 
 export const openCard = (id, colId) => (dispatch, getState) => {
-  console.log("Open Card with id = " + id);
   dispatch(actions.openCard(id, colId));
 };
 

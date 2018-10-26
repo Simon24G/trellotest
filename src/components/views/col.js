@@ -27,10 +27,10 @@ class Col extends Component {
     this.state = { isEditName: false };
   }
   componentWillReceiveProps(nextProps) {
-    /*console.log("Col WillReceiveProps " + this.props.col.name);
+    console.log("Col WillReceiveProps " + this.props.col.name);
     console.log("new props: ", nextProps);
     console.log("old props: ", this.props);
-    console.log("_________________________________________");*/
+    console.log("_________________________________________");
   }
 
   editName = () => {
@@ -97,6 +97,7 @@ class Col extends Component {
         );
       }
     }
+    console.log("Col cardsIcons", cardsIconsComponets.length);
 
     return (
       <div className="col">

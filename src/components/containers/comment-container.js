@@ -30,8 +30,8 @@ class CommentContainer extends Component {
     this.state = { textComment: "" };
   }
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-    console.log(this.props);
+    //  console.log(nextProps);
+    //  console.log(this.props);
   }
   saveComment = e => {
     e.preventDefault();
@@ -58,7 +58,7 @@ class CommentContainer extends Component {
         );
       }
     }
-    console.log(commentsComponets.length);
+    //console.log(commentsComponets.length);
     return (
       <div>
         <form onSubmit={this.saveComment}>

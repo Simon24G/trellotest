@@ -24,32 +24,51 @@ const initialState = () => {
 
 const ACTION_HANDLER = {
   [CHANGE_NAME_COL]: (state, { id, name }) => {
-    const { cols } = { ...state };
-    cols[id.toString()].name = name;
     return {
       ...state,
-      cols
+      cols: {
+        ...state.cols,
+        [id.toString()]: { ...state.cols[id.toString()], name }
+      }
     };
   },
 
   //dependent from cardReducer
   [ADD_CARD]: (state, { id, colId }) => {
-    let { cols } = { ...state };
-    cols[colId.toString()].cards[id.toString()] = {
-      id,
-      colId
-    };
     return {
       ...state,
-      cols
+      cols: {
+        ...state.cols,
+        [colId.toString()]: {
+          ...state.cols[colId.toString()],
+          cards: {
+            ...state.cols[colId.toString()].cards,
+            [id.toString()]: {
+              id,
+              colId
+            }
+          }
+        }
+      }
     };
   },
   [DELETE_CARD]: (state, { id, colId }) => {
-    let { cols } = { ...state };
-    delete cols[colId.toString()].cards[id.toString()];
+    let cards = state.cols[colId.toString()].cards;
+    let newCards = {};
+    for (var key in cards) {
+      if (cards.hasOwnProperty(key) && key !== id.toString()) {
+        newCards[key] = cards[key];
+      }
+    }
     return {
       ...state,
-      cols
+      cols: {
+        ...state.cols,
+        [colId.toString()]: {
+          ...state.cols[colId.toString()],
+          cards: newCards
+        }
+      }
     };
   },
   //base

@@ -57,8 +57,6 @@ class CardContainer extends Component {
     } else {
       card = nextProps.card;
     }
-    console.log("card.id");
-    console.log(card.id);
     return {
       card,
       isCreatePhase
@@ -87,7 +85,6 @@ class CardContainer extends Component {
   render() {
     const { col, authorName, deleteCard, closeCard } = this.props;
     const { card, isCreatePhase } = this.state;
-    console.log("", this.props);
     return (
       <Card
         card={card}
@@ -107,7 +104,7 @@ class CardContainer extends Component {
             key="ButtonDelete"
             className="btn btn-danger"
             onClick={() => {
-              deleteCard(card.id);
+              deleteCard(card.id, card.colId);
             }}
           >
             Delete Card
@@ -131,7 +128,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(addCard(name, description, colId)),
     changeCard: (id, name, description, colId) =>
       dispatch(changeCard(id, name, description, colId)),
-    deleteCard: () => dispatch(deleteCard()),
+    deleteCard: (id, colId) => dispatch(deleteCard(id, colId)),
     closeCard: () => dispatch(closeCard())
   };
 };
@@ -144,7 +141,6 @@ const mapStateToProps = store => {
   } else {
     if (!(id.toString() in store.cardState)) closeCard();
     card = store.cardState[id.toString()];
-    console.log(card);
   }
 
   return {

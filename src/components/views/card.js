@@ -47,9 +47,7 @@ class Card extends Component {
   render() {
     const { closeCard, children } = this.props;
     const { name, description } = this.state;
-    //const children = this.props.children;
 
-    console.log("render card: ");
     return (
       <div className="modal" tabIndex="-1" role="dialog">
         <div className="modal-dialog" role="document">

@@ -12,7 +12,6 @@ function Board(props) {
       colsComponets.push(<Col key={cols[key].id} col={cols[key]} />);
     }
   }
-  console.log(colsComponets);
   return <div className="row">{colsComponets}</div>;
 }
 

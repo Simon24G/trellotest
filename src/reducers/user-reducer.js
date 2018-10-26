@@ -18,32 +18,35 @@ const initialState = () => {
 //TODO: idea: To card save current values edit card
 const ACTION_HANDLER = {
   [ADD_CARD]: (state, { id, colId }) => {
-    let newState = { ...state };
-    newState.currentCard.card = { id, colId };
-    return newState;
+    return {
+      ...state,
+      currentCard: { ...state.currentCard, card: { id, colId } }
+    };
   },
 
   [DELETE_CARD]: (state, { id }) => {
-    let newState = { ...state };
-    if (newState.currentCard.card.id === id) {
-      newState.currentCard.card = { id: 0 };
-      newState.currentCard.openCard = false;
+    if (state.currentCard.card.id === id) {
+      return {
+        ...state,
+        currentCard: { ...state.currentCard, card: {}, openCard: false }
+      };
     }
-    return newState;
+    return {
+      ...state
+    };
   },
-
   [OPEN_WINDOW_CARD]: (state, { id, colId }) => {
-    let newState = { ...state };
-    newState.currentCard.card = { id, colId };
-    newState.currentCard.openCard = true;
-    return newState;
+    return {
+      ...state,
+      currentCard: { ...state.currentCard, card: { id, colId }, openCard: true }
+    };
   },
 
   [CLOSE_WINDOW_CARD]: (state, action) => {
-    let newState = { ...state };
-    newState.currentCard.card = {};
-    newState.currentCard.openCard = false;
-    return newState;
+    return {
+      ...state,
+      currentCard: { ...state.currentCard, card: {}, openCard: false }
+    };
   },
 
   [LOG_IN]: (state, { name }) => {

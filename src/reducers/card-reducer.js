@@ -24,16 +24,23 @@ const ACTION_HANDLER = {
     return { ...state, [id.toString()]: card };
   },
   [DELETE_CARD]: (state, { id }) => {
-    let cards = { ...state };
-    delete cards[id.toString()];
-    return cards;
+    let newCards = {};
+    for (var key in state) {
+      if (state.hasOwnProperty(key) && key !== id.toString()) {
+        newCards[key] = state[key];
+      }
+    }
+    return { ...newCards };
   },
   [CHANGE_CARD]: (state, { id, name, description }) => {
-    let cards = { ...state };
-    let card = cards[id.toString()];
-    card.name = name;
-    card.description = description;
-    return cards;
+    return {
+      ...state,
+      [id.toString()]: {
+        ...state[id.toString()],
+        name,
+        description
+      }
+    };
   },
   [ADD_COMMENT]: (state, { id, text, authorName, cardId }) => {
     let comment = {
@@ -42,19 +49,36 @@ const ACTION_HANDLER = {
       authorName,
       cardId
     };
-    let cards = { ...state };
-    cards[cardId.toString()].comments[id.toString()] = comment;
-    return cards;
+    return {
+      ...state,
+      [cardId.toString()]: {
+        ...state[cardId.toString()],
+        comments: {
+          ...state[cardId.toString()].comments,
+          [id.toString()]: comment
+        }
+      }
+    };
   },
   [DELETE_COMMENT]: (state, { id, cardId }) => {
     let cards = { ...state };
     delete cards[cardId.toString()].comments[id.toString()];
-    return cards;
+    return { ...cards };
   },
   [CHANGE_COMMENT]: (state, { id, text, cardId }) => {
-    let cards = { ...state };
-    cards[cardId.toString()].comments[id.toString()].text = text;
-    return cards;
+    return {
+      ...state,
+      [cardId.toString()]: {
+        ...state[cardId.toString()],
+        comments: {
+          ...state[cardId.toString()].comments,
+          [id.toString()]: {
+            ...state[cardId.toString()].comments[id.toString()],
+            text
+          }
+        }
+      }
+    };
   },
   [CLEAR]: (state, action) => {
     return initialState();
