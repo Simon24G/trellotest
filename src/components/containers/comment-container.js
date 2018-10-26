@@ -29,7 +29,10 @@ class CommentContainer extends Component {
     super(props);
     this.state = { textComment: "" };
   }
-
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+    console.log(this.props);
+  }
   saveComment = e => {
     e.preventDefault();
     this.props.addComment(
@@ -55,7 +58,7 @@ class CommentContainer extends Component {
         );
       }
     }
-
+    console.log(commentsComponets.length);
     return (
       <div>
         <form onSubmit={this.saveComment}>
@@ -98,9 +101,8 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const mapStateToProps = (store, oneProps) => {
+const mapStateToProps = store => {
   return {
-    comments: store.cardState[oneProps.cardId.toString()].comments,
     authorName: store.userState.author.name
   };
 };

@@ -87,7 +87,7 @@ class CardContainer extends Component {
   render() {
     const { col, authorName, deleteCard, closeCard } = this.props;
     const { card, isCreatePhase } = this.state;
-
+    console.log("", this.props);
     return (
       <Card
         card={card}
@@ -114,7 +114,11 @@ class CardContainer extends Component {
           </button>
         )}
         {!isCreatePhase && (
-          <CommentContainer key="CommentContainer" cardId={card.id} />
+          <CommentContainer
+            key="CommentContainer"
+            cardId={card.id}
+            comments={card.comments}
+          />
         )}
       </Card>
     );
@@ -140,6 +144,7 @@ const mapStateToProps = store => {
   } else {
     if (!(id.toString() in store.cardState)) closeCard();
     card = store.cardState[id.toString()];
+    console.log(card);
   }
 
   return {

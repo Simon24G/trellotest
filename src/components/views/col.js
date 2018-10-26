@@ -27,10 +27,10 @@ class Col extends Component {
     this.state = { isEditName: false };
   }
   componentWillReceiveProps(nextProps) {
-    console.log("Col WillReceiveProps " + this.props.col.name);
+    /*console.log("Col WillReceiveProps " + this.props.col.name);
     console.log("new props: ", nextProps);
     console.log("old props: ", this.props);
-    console.log("_________________________________________");
+    console.log("_________________________________________");*/
   }
 
   editName = () => {
@@ -59,10 +59,11 @@ class Col extends Component {
   render() {
     const { id, name, cards } = this.props.col;
     const { nameCol, isEditName } = this.state;
+    /*
     console.log("Col render " + name);
     console.log("cards: ", cards);
     console.log("_________________________________________");
-
+    */
     const formColName = isEditName ? (
       <form onSubmit={this.saveName}>
         <input
@@ -122,14 +123,6 @@ class Col extends Component {
   }
 }
 
-const mapStateToProps = (store, oneProps) => {
-  console.log("Store to Col: " + oneProps.col.name, store);
-
-  return {
-    col: store.boardState.cols[oneProps.col.id.toString()]
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
     changeNameCol: (id, name) => dispatch(changeNameCol(id, name)),
@@ -138,6 +131,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(Col);
