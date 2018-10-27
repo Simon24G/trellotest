@@ -26,12 +26,6 @@ class Col extends Component {
     super(props);
     this.state = { isEditName: false };
   }
-  componentWillReceiveProps(nextProps) {
-    console.log("Col WillReceiveProps " + this.props.col.name);
-    console.log("new props: ", nextProps);
-    console.log("old props: ", this.props);
-    console.log("_________________________________________");
-  }
 
   editName = () => {
     this.setState({
@@ -59,11 +53,6 @@ class Col extends Component {
   render() {
     const { id, name, cards } = this.props.col;
     const { nameCol, isEditName } = this.state;
-    /*
-    console.log("Col render " + name);
-    console.log("cards: ", cards);
-    console.log("_________________________________________");
-    */
     const formColName = isEditName ? (
       <form onSubmit={this.saveName}>
         <input
@@ -97,7 +86,6 @@ class Col extends Component {
         );
       }
     }
-    console.log("Col cardsIcons", cardsIconsComponets.length);
 
     return (
       <div className="col">

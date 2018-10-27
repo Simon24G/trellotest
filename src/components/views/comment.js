@@ -15,10 +15,14 @@ class Comment extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = { textComment: this.props.comment.text, id: this.comment.id };
+    this.state = { textComment: props.comment.text };
   }
   componentWillReceiveProps(nextProps) {
-    if (this.state.comment.id === nextProps.comment.id) return;
+    if (
+      this.props.comment.id === nextProps.comment.id &&
+      this.props.comment.text === nextProps.comment.text
+    )
+      return;
     //смещать id редактируемого коммента
     this.setState({
       textComment: nextProps.comment.text,
@@ -29,19 +33,15 @@ class Comment extends Component {
   updateComment = e => {
     e.preventDefault();
     const { id, cardId } = this.props.comment;
-    this.changeComment(id, this.state.textComment, cardId);
-    this.setState(prevState => {
-      return {
-        regim: false,
-        textComment: prevState.comment.text,
-        comment: prevState.comment
-      };
+    this.props.changeComment(id, this.state.textComment, cardId);
+    this.setState({
+      regim: false
     });
   };
   delete = e => {
     e.preventDefault();
     const { id, cardId } = this.props.comment;
-    this.deleteComment(id, cardId);
+    this.props.deleteComment(id, cardId);
   };
   edit = () => {
     this.setState({

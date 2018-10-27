@@ -61,9 +61,20 @@ const ACTION_HANDLER = {
     };
   },
   [DELETE_COMMENT]: (state, { id, cardId }) => {
-    let cards = { ...state };
-    delete cards[cardId.toString()].comments[id.toString()];
-    return { ...cards };
+    let newComments = {};
+    const { comments } = state[cardId.toString()];
+    for (var key in comments) {
+      if (comments.hasOwnProperty(key) && key !== id.toString()) {
+        newComments[key] = comments[key];
+      }
+    }
+    return {
+      ...state,
+      [cardId.toString()]: {
+        ...state[cardId.toString()],
+        comments: newComments
+      }
+    };
   },
   [CHANGE_COMMENT]: (state, { id, text, cardId }) => {
     return {

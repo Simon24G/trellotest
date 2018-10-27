@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Comment from "../views/card.js";
+import Comment from "../views/comment.js";
 
 import {
   addComment,
@@ -29,10 +29,7 @@ class CommentContainer extends Component {
     super(props);
     this.state = { textComment: "" };
   }
-  componentWillReceiveProps(nextProps) {
-    //  console.log(nextProps);
-    //  console.log(this.props);
-  }
+  componentWillReceiveProps(nextProps) {}
   saveComment = e => {
     e.preventDefault();
     this.props.addComment(
@@ -58,7 +55,7 @@ class CommentContainer extends Component {
         );
       }
     }
-    //console.log(commentsComponets.length);
+    console.log(commentsComponets);
     return (
       <div>
         <form onSubmit={this.saveComment}>

@@ -59,6 +59,7 @@ const ACTION_HANDLER = {
 
   //base
   [CLEAR]: (state, action) => {
+    localStorage.clear();
     return initialState();
   }
 };

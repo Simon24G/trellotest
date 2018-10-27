@@ -51,7 +51,7 @@ class CardContainer extends Component {
         id: 0,
         name: "",
         description: "",
-        comments: new Map(),
+        comments: {},
         colId: nextProps.col.id
       };
     } else {
@@ -64,8 +64,7 @@ class CardContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.card.id === this.state.card.id && nextProps.card.id === 0)
-      return;
+    if (nextProps.card.id === 0) return;
     this.setState(this.getStateFromProps(nextProps));
   }
 

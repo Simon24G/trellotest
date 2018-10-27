@@ -25,6 +25,7 @@ class Card extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       name: props.card.name,
       description: props.card.description
@@ -47,7 +48,6 @@ class Card extends Component {
   render() {
     const { closeCard, children } = this.props;
     const { name, description } = this.state;
-
     return (
       <div className="modal" tabIndex="-1" role="dialog">
         <div className="modal-dialog" role="document">
