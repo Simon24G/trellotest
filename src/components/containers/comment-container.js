@@ -37,25 +37,21 @@ class CommentContainer extends Component {
       this.props.authorName,
       this.props.cardId
     );
+    this.setState({ textComment: "" });
   };
 
   render() {
     const { comments, changeComment, deleteComment } = this.props;
+    const { textComment } = this.state;
+    const commentsComponets = Object.values(comments).map(comment => (
+      <Comment
+        key={comment.id}
+        comment={comment}
+        changeComment={changeComment}
+        deleteComment={deleteComment}
+      />
+    ));
 
-    let commentsComponets = [];
-    for (var key in comments) {
-      if (comments.hasOwnProperty(key)) {
-        commentsComponets.push(
-          <Comment
-            key={comments[key].id}
-            comment={comments[key]}
-            changeComment={changeComment}
-            deleteComment={deleteComment}
-          />
-        );
-      }
-    }
-    console.log(commentsComponets);
     return (
       <div>
         <form onSubmit={this.saveComment}>
@@ -68,7 +64,7 @@ class CommentContainer extends Component {
             onChange={e => {
               this.setState({ textComment: e.target.value });
             }}
-            value={this.state.textComment}
+            value={textComment}
             required
           />
           <button type="submit" className="btn btn-info">

@@ -23,7 +23,6 @@ class Comment extends Component {
       this.props.comment.text === nextProps.comment.text
     )
       return;
-    //смещать id редактируемого коммента
     this.setState({
       textComment: nextProps.comment.text,
       regim: false
@@ -48,7 +47,6 @@ class Comment extends Component {
       regim: true
     });
   };
-  //problem при удалении комментариев во время редактирования может сместиться id редактируемого
   render() {
     const { textComment, regim } = this.state;
     const { authorName, text } = this.props.comment;

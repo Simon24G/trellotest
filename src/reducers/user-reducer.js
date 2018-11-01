@@ -15,7 +15,6 @@ const initialState = () => {
   };
 };
 
-//TODO: idea: To card save current values edit card
 const ACTION_HANDLER = {
   [ADD_CARD]: (state, { id, colId }) => {
     return {
@@ -57,7 +56,6 @@ const ACTION_HANDLER = {
     return { ...state, author: null };
   },
 
-  //base
   [CLEAR]: (state, action) => {
     localStorage.clear();
     return initialState();

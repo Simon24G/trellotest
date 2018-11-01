@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-//import Navigate from "../views/navigate.js";
 
 class Card extends Component {
   static propTypes = {
@@ -33,7 +32,6 @@ class Card extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    //отделить current от reality
     this.setState({
       name: nextProps.card.name,
       description: nextProps.card.description

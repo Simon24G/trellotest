@@ -77,15 +77,9 @@ class Col extends Component {
         </button>
       </div>
     );
-
-    let cardsIconsComponets = [];
-    for (var key in cards) {
-      if (cards.hasOwnProperty(key)) {
-        cardsIconsComponets.push(
-          <CardIcon key={cards[key].id} id={cards[key].id} />
-        );
-      }
-    }
+    const cardsIconsComponets = Object.values(cards).map(card => (
+      <CardIcon key={card.id} id={card.id} />
+    ));
 
     return (
       <div className="col">

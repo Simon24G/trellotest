@@ -24,13 +24,9 @@ const ACTION_HANDLER = {
     return { ...state, [id.toString()]: card };
   },
   [DELETE_CARD]: (state, { id }) => {
-    let newCards = {};
-    for (var key in state) {
-      if (state.hasOwnProperty(key) && key !== id.toString()) {
-        newCards[key] = state[key];
-      }
-    }
-    return { ...newCards };
+    const { [id.toString()]: colToDelete, ...newCards } = state;
+
+    return newCards;
   },
   [CHANGE_CARD]: (state, { id, name, description }) => {
     return {
@@ -61,13 +57,10 @@ const ACTION_HANDLER = {
     };
   },
   [DELETE_COMMENT]: (state, { id, cardId }) => {
-    let newComments = {};
-    const { comments } = state[cardId.toString()];
-    for (var key in comments) {
-      if (comments.hasOwnProperty(key) && key !== id.toString()) {
-        newComments[key] = comments[key];
-      }
-    }
+    const { [id.toString()]: colToDelete, ...newComments } = state[
+      cardId.toString()
+    ].comments;
+
     return {
       ...state,
       [cardId.toString()]: {
@@ -91,7 +84,7 @@ const ACTION_HANDLER = {
       }
     };
   },
-  [CLEAR]: (state, action) => {
+  [CLEAR]: () => {
     return initialState();
   }
 };

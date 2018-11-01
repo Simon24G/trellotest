@@ -6,12 +6,10 @@ import { connect } from "react-redux";
 function Board(props) {
   const { cols } = props;
 
-  let colsComponets = [];
-  for (var key in cols) {
-    if (cols.hasOwnProperty(key)) {
-      colsComponets.push(<Col key={cols[key].id} col={cols[key]} />);
-    }
-  }
+  const colsComponets = Object.values(cols).map(col => (
+    <Col key={col.id} col={col} />
+  ));
+
   return <div className="row">{colsComponets}</div>;
 }
 

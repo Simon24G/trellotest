@@ -33,7 +33,6 @@ const ACTION_HANDLER = {
     };
   },
 
-  //dependent from cardReducer
   [ADD_CARD]: (state, { id, colId }) => {
     return {
       ...state,
@@ -54,12 +53,8 @@ const ACTION_HANDLER = {
   },
   [DELETE_CARD]: (state, { id, colId }) => {
     let cards = state.cols[colId.toString()].cards;
-    let newCards = {};
-    for (var key in cards) {
-      if (cards.hasOwnProperty(key) && key !== id.toString()) {
-        newCards[key] = cards[key];
-      }
-    }
+    const { [id.toString()]: colToDelete, ...newCards } = cards;
+
     return {
       ...state,
       cols: {
@@ -71,9 +66,8 @@ const ACTION_HANDLER = {
       }
     };
   },
-  //base
-  [CLEAR]: (state, action) => {
-    return initialState(); //show if initialState
+  [CLEAR]: () => {
+    return initialState();
   }
 };
 
